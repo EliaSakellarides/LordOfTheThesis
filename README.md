@@ -1,130 +1,258 @@
-# 🌋 Lord of the Thesis 🌋# 🌋 IL SIGNORE DEGLI ANELLI - LA COMPAGNIA DELLA TESI 🌋# 🧙‍♂️ Lord of the Thesis
+# 🌋 Lord of the Thesis - La Compagnia della Tesi# 🌋 Lord of the Thesis 🌋# 🌋 IL SIGNORE DEGLI ANELLI - LA COMPAGNIA DELLA TESI 🌋# 🧙‍♂️ Lord of the Thesis
 
 
 
-<div align="center">
+**Progetto per l'esame di Programmazione**
 
 
 
-**An Epic Text Adventure Through Middle-earth**Un'avventura narrativa epica attraverso la Terra di Mezzo, dove dovrai portare la TESI (l'Anello Unico del Sapere) da La Contea a Mordor per distruggerla nel Monte Fato!> *"Un gioco, una tesi per governarli tutti!"*
+Un'avventura testuale ispirata a *Il Signore degli Anelli*, dove devi portare la tua TESI (l'Anello Unico del Sapere) dalla Contea fino a Mordor per consegnarla al Monte Fato!<div align="center">
 
 
-
-![Java](https://img.shields.io/badge/Java-8%2B-orange.svg)
-
-![License](https://img.shields.io/badge/License-MIT-blue.svg)
-
-![Platform](https://img.shields.io/badge/Platform-Cross--platform-green.svg)## 🎮 CARATTERISTICHE[![Java](https://img.shields.io/badge/Java-8%2B-orange.svg)](https://www.java.com)
-
-
-
-*"One Thesis to rule them all!"*[![License](https://img.shields.io/badge/License-Educational-blue.svg)](LICENSE)
-
-
-
-</div>✨ **Narrazione Epica** - Segui la trama del Signore degli Anelli in 12 capitoli  [![Platform](https://img.shields.io/badge/Platform-Cross--platform-green.svg)](README.md)
-
-
-
----📖 **Intro Cinematica** - 3 parti narrate da Galadriel sulla forgiatura delle Tesi  
-
-
-
-## 📖 About🎯 **Enigmi Integrati** - Risolvi enigmi semplici (matematica, logica) per avanzare  **Avventura grafica testuale** ispirata a LOTR, ambientata nel mondo universitario italiano. 
-
-
-
-**Lord of the Thesis** is a narrative text adventure game inspired by J.R.R. Tolkien's *The Lord of the Rings*. Embark on an epic journey from The Shire to Mount Doom, solving puzzles and meeting iconic characters along the way.🖼️ **Grafica Full-Screen** - Immagini immersive con UI overlay integrata  Risolvi **domande semplicissime** per completare i livelli e consegnare la tua tesi!
-
-
-
-The game combines classic text adventure mechanics with:🎭 **Personaggi Iconici** - Gandalf, Elrond, Galadriel, Aragorn, Sauron...  
-
-- 🎨 Custom **pixel art visuals** (800×480 resolution)
-
-- 🎵 Authentic **8-bit chiptune soundtrack**⚔️ **Eventi Chiave** - Balrog, Concilio di Elrond, Sentieri dei Morti, Monte Fato  ---
-
-- 🎬 Cinematic **scrolling intro** sequence
-
-- 🧩 **10 story chapters** with integrated puzzles🏆 **Sistema di Punteggio** - +100 punti per risposta corretta, -10 per errori  
-
-- 🎮 **Full-screen immersive** interface
-
-🎓 **Finale Epico** - Distruggi l'Anello e ottieni la LAUREA!  ## 🎮 Modalità di Gioco
 
 ---
 
 
 
-## ✨ Features
-
-## 🚀 AVVIO RAPIDO### 1. **Esplorazione Libera**
-
-### 🌍 Journey Through Middle-earth
-
-Visit legendary locations:- Cammina tra le 9 stanze del dipartimento (`nord`, `sud`, `est`, `ovest`)
-
-- **La Contea** (The Shire) - Your peaceful starting point
-
-- **Bag End** - Bilbo's famous birthday party```bash- Raccogli oggetti (`prendi anello`)
-
-- **The Wild** - Hunted by the Nazgûl
-
-- **Bree** - Meet Strider (Aragorn)# Compila- Parla con personaggi (`parla gandalf`)
-
-- **Rivendell** - Elven refuge of Elrond
-
-- **Council of Elrond** - Decide the fate of the Ring./scripts/compile.sh- Consulta inventario (`inventario`)
-
-- *And more locations to come...*
+## 🎮 Cosa fa**An Epic Text Adventure Through Middle-earth**Un'avventura narrativa epica attraverso la Terra di Mezzo, dove dovrai portare la TESI (l'Anello Unico del Sapere) da La Contea a Mordor per distruggerla nel Monte Fato!> *"Un gioco, una tesi per governarli tutti!"*
 
 
 
-### 🎭 Meet Iconic Characters
+- **10 capitoli** che seguono la storia del Signore degli Anelli
 
-- **Gandalf** - Your wise mentor# Gioca### 2. **Modalità Livelli (Consigliata!)**
+- **Intro cinematica** con scrolling (tipo i film LOTR)
 
-- **Aragorn (Strider)** - Your thesis advisor and protector
+- **Pixel art** personalizzata per ogni location (Contea, Bag End, Rivendell, ecc.)![Java](https://img.shields.io/badge/Java-8%2B-orange.svg)
 
-- **Elrond** - Lord of Rivendell./scripts/run.sh- Premi **"Inizia Livelli"** o digita `inizia livelli`
+- **Musiche 8-bit** che cambiano automaticamente ad ogni capitolo
 
-- **Sauron** - The dark lord himself
+- **Enigmi** integrati nella storia per avanzare![License](https://img.shields.io/badge/License-MIT-blue.svg)
 
-```- Rispondi a **3 domande facilissime**:
+- **Controlli volume** con i tasti F1/F2/F3
 
-### 🎯 Puzzle-Based Progression
+![Platform](https://img.shields.io/badge/Platform-Cross--platform-green.svg)## 🎮 CARATTERISTICHE[![Java](https://img.shields.io/badge/Java-8%2B-orange.svg)](https://www.java.com)
 
-- Solve riddles and puzzles to advance through chapters  - "Quanto fa 1+1?" → Rispondi: `rispondi 2`
-
-- No directional navigation - pure narrative flow
-
-- Type answers using `rispondi [your answer]`## 📖 COME SI GIOCA  - "Di che colore è il cielo?" → Rispondi: `rispondi azzurro`
+---
 
 
 
-### 🎵 Immersive Audio  - "Qual è la prima lettera di 'tesi'?" → Rispondi: `rispondi t`
+## 🚀 Come si usa
 
-- 7 unique 8-bit music tracks
+*"One Thesis to rule them all!"*[![License](https://img.shields.io/badge/License-Educational-blue.svg)](LICENSE)
 
-- Dynamic music changes per chapter### Comandi Disponibili:- Punteggio: +50 per risposta corretta, -5 per errore
+### Prerequisiti
 
-- **F1** - Volume Down
+- Java 8 o superiore
 
-- **F2** - Volume Up  - `avanti` - Prossimo capitolo
+
+
+### Compilare ed eseguire</div>✨ **Narrazione Epica** - Segui la trama del Signore degli Anelli in 12 capitoli  [![Platform](https://img.shields.io/badge/Platform-Cross--platform-green.svg)](README.md)
+
+
+
+```bash
+
+# Compila
+
+./scripts/compile.sh---📖 **Intro Cinematica** - 3 parti narrate da Galadriel sulla forgiatura delle Tesi  
+
+
+
+# Avvia il gioco
+
+./scripts/run.sh
+
+```## 📖 About🎯 **Enigmi Integrati** - Risolvi enigmi semplici (matematica, logica) per avanzare  **Avventura grafica testuale** ispirata a LOTR, ambientata nel mondo universitario italiano. 
+
+
+
+Su Windows usa i file `.bat` nella cartella `scripts/`.
+
+
+
+---**Lord of the Thesis** is a narrative text adventure game inspired by J.R.R. Tolkien's *The Lord of the Rings*. Embark on an epic journey from The Shire to Mount Doom, solving puzzles and meeting iconic characters along the way.🖼️ **Grafica Full-Screen** - Immagini immersive con UI overlay integrata  Risolvi **domande semplicissime** per completare i livelli e consegnare la tua tesi!
+
+
+
+## 🎯 Come si gioca
+
+
+
+1. Inserisci il tuo nomeThe game combines classic text adventure mechanics with:🎭 **Personaggi Iconici** - Gandalf, Elrond, Galadriel, Aragorn, Sauron...  
+
+2. Leggi l'intro cinematica (premi "avanti" per continuare)
+
+3. Risolvi gli enigmi per proseguire nella storia- 🎨 Custom **pixel art visuals** (800×480 resolution)
+
+4. Usa "rispondi [risposta]" per rispondere agli enigmi
+
+- 🎵 Authentic **8-bit chiptune soundtrack**⚔️ **Eventi Chiave** - Balrog, Concilio di Elrond, Sentieri dei Morti, Monte Fato  ---
+
+### Comandi principali
+
+- `avanti` - Vai avanti nella storia- 🎬 Cinematic **scrolling intro** sequence
+
+- `rispondi [risposta]` - Rispondi agli enigmi
+
+- `guarda` o F5 - Guarda intorno- 🧩 **10 story chapters** with integrated puzzles🏆 **Sistema di Punteggio** - +100 punti per risposta corretta, -10 per errori  
+
+- `inventario` - Vedi l'inventario
+
+- `aiuto` o F12 - Mostra l'aiuto- 🎮 **Full-screen immersive** interface
+
+
+
+### Controlli audio🎓 **Finale Epico** - Distruggi l'Anello e ottieni la LAUREA!  ## 🎮 Modalità di Gioco
+
+- **F1** - Abbassa volume
+
+- **F2** - Alza volume---
 
 - **F3** - Mute/Unmute
 
+
+
+---
+
+## ✨ Features
+
+## 📁 Struttura del progetto
+
+## 🚀 AVVIO RAPIDO### 1. **Esplorazione Libera**
+
+```
+
+LordOfTheThesis/### 🌍 Journey Through Middle-earth
+
+├── src/                    # Codice sorgente Java
+
+│   └── com/lordofthethesis/Visit legendary locations:- Cammina tra le 9 stanze del dipartimento (`nord`, `sud`, `est`, `ovest`)
+
+│       ├── Main.java       # Entry point
+
+│       ├── engine/         # Game engine e logica- **La Contea** (The Shire) - Your peaceful starting point
+
+│       ├── gui/            # Interfaccia grafica
+
+│       ├── graphics/       # Rendering delle immagini- **Bag End** - Bilbo's famous birthday party```bash- Raccogli oggetti (`prendi anello`)
+
+│       ├── audio/          # Sistema audio
+
+│       └── model/          # Modelli (Player, Room, ecc.)- **The Wild** - Hunted by the Nazgûl
+
+├── assets/
+
+│   ├── images/            # Pixel art (800×480 PNG)- **Bree** - Meet Strider (Aragorn)# Compila- Parla con personaggi (`parla gandalf`)
+
+│   └── music/             # Musiche 8-bit (WAV)
+
+├── bin/                   # File compilati- **Rivendell** - Elven refuge of Elrond
+
+└── scripts/               # Script per compilare/eseguire
+
+```- **Council of Elrond** - Decide the fate of the Ring./scripts/compile.sh- Consulta inventario (`inventario`)
+
+
+
+---- *And more locations to come...*
+
+
+
+## 🎨 Asset
+
+
+
+### Immagini### 🎭 Meet Iconic Characters
+
+8 pixel art personalizzate in stile LOTR:
+
+- Contea, Bag End, Nazgûl, Granpasso, Rivendell, Concilio di Elrond, ecc.- **Gandalf** - Your wise mentor# Gioca### 2. **Modalità Livelli (Consigliata!)**
+
+- Risoluzione: 800×480
+
+- Formato: PNG- **Aragorn (Strider)** - Your thesis advisor and protector
+
+
+
+### Musiche- **Elrond** - Lord of Rivendell./scripts/run.sh- Premi **"Inizia Livelli"** o digita `inizia livelli`
+
+7 tracce 8-bit basate sulla colonna sonora di Howard Shore:
+
+- intro.wav - One Ring Theme- **Sauron** - The dark lord himself
+
+- contea.wav - Concerning Hobbits
+
+- rivendell.wav - LOTR Main Theme```- Rispondi a **3 domande facilissime**:
+
+- E altre...
+
+### 🎯 Puzzle-Based Progression
+
+---
+
+- Solve riddles and puzzles to advance through chapters  - "Quanto fa 1+1?" → Rispondi: `rispondi 2`
+
+## 🛠️ Tecnologie usate
+
+- No directional navigation - pure narrative flow
+
+- **Java 8+** (Swing per la GUI)
+
+- **javax.sound.sampled** per l'audio- Type answers using `rispondi [your answer]`## 📖 COME SI GIOCA  - "Di che colore è il cielo?" → Rispondi: `rispondi azzurro`
+
+- **Custom rendering** per le immagini full-screen
+
+
+
+---
+
+### 🎵 Immersive Audio  - "Qual è la prima lettera di 'tesi'?" → Rispondi: `rispondi t`
+
+## 📝 Note
+
+- 7 unique 8-bit music tracks
+
+Questo è un progetto universitario creato per l'esame di programmazione. Tutti i personaggi, luoghi e riferimenti a *Il Signore degli Anelli* appartengono a J.R.R. Tolkien e sono usati solo come ispirazione.
+
+- Dynamic music changes per chapter### Comandi Disponibili:- Punteggio: +50 per risposta corretta, -5 per errore
+
+Le musiche sono remix 8-bit della colonna sonora originale di Howard Shore.
+
+- **F1** - Volume Down
+
+---
+
+- **F2** - Volume Up  - `avanti` - Prossimo capitolo
+
+## 👨‍💻 Autore
+
+- **F3** - Mute/Unmute
+
+**Elia Sakellarides**
+
 - `rispondi [risposta]` - Rispondi all'enigma---
+
+Università degli Studi di Bari "Aldo Moro"
 
 ### 🎬 Cinematic Experience
 
+---
+
 - Multi-part scrolling intro inspired by LOTR films- `aiuto` - Mostra comandi
+
+## 📄 Licenza
 
 - Full-screen pixel art visuals
 
+Progetto educativo - MIT License
+
 - Integrated UI overlay with text and inventory- `dove` - Vedi progresso## 🖼️ Personalizzare le Immagini
 
+---
 
+
+
+*"Even the smallest person can change the course of the future."* - Galadriel
 
 ---- `inventario` - Controlla zaino
 
