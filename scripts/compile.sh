@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Script di compilazione per Lord of the Thesis
+
+echo "🔨 Compilazione di Lord of the Thesis..."
+
+# Crea la directory bin se non esiste
+mkdir -p bin
+
+# Compila tutti i file Java
+javac -d bin -sourcepath src src/com/lordofthethesis/**/*.java
+
+if [ $? -eq 0 ]; then
+    echo "✅ Compilazione completata con successo!"
+    echo "📂 I file compilati sono in: bin/"
+    echo ""
+    echo "Per avviare il gioco, usa: ./run.sh"
+else
+    echo "❌ Errore durante la compilazione!"
+    exit 1
+fi

@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: com.lordofthethesis.Main
+Created-By: Lord of the Thesis Build System
+

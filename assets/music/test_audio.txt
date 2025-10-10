@@ -1,0 +1,14 @@
+Per testare il sistema audio, puoi:
+
+1. Usare suoni di sistema macOS:
+   - Converti in WAV con: afconvert /System/Library/Sounds/Glass.aiff intro.wav
+
+2. Scaricare musiche 8-bit gratuite da:
+   - https://freesound.org (ricerca "8-bit")
+   - https://opengameart.org (sezione music)
+
+3. Generare musica 8-bit online:
+   - BeepBox.co
+   - jsfxr.com
+
+Per ora il gioco funzionerà anche SENZA file audio (mostrerà solo warning console).
