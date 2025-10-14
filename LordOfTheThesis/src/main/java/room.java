@@ -1,4 +1,4 @@
-
+package it.lordofthethesis;
 
 public class Room {
     private String name;
