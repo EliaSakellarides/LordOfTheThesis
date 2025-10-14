@@ -27,7 +27,7 @@ public class FullScreenGUI extends JFrame {
     
     private void initializeGUI() {
         setTitle("Lord of the Thesis");
-        setSize(800, 650); // 600 per renderer + 50 per comandi
+        setSize(1000, 800); // Aumentato: 1000x750 per renderer + 50 per comandi
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout(0, 0));
         setResizable(false);
@@ -91,6 +91,31 @@ public class FullScreenGUI extends JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 switch (e.getKeyCode()) {
+                    case KeyEvent.VK_ENTER:
+                    case KeyEvent.VK_SPACE:
+                    case KeyEvent.VK_DOWN:
+                    case KeyEvent.VK_PAGE_DOWN:
+                        // Se ci sono più pagine, mostra la prossima
+                        if (engine.hasMorePages()) {
+                            engine.nextPage();
+                            String nextPageText = engine.getCurrentPageText();
+                            renderer.setNarrativeText(nextPageText);
+                            renderer.repaint();
+                            e.consume(); // Previeni l'azione normale
+                            return;
+                        }
+                        break;
+                    case KeyEvent.VK_UP:
+                    case KeyEvent.VK_PAGE_UP:
+                        // Torna alla pagina precedente
+                        if (engine.previousPage()) {
+                            String prevPageText = engine.getCurrentPageText();
+                            renderer.setNarrativeText(prevPageText);
+                            renderer.repaint();
+                            e.consume();
+                            return;
+                        }
+                        break;
                     case KeyEvent.VK_F1:
                         engine.volumeDown(); // F1 = Volume giù
                         break;
@@ -173,9 +198,9 @@ public class FullScreenGUI extends JFrame {
             // Attiva intro cinematica e imposta immagine Sauron
             engine.startCinematicIntro();
             
-            // Mostra il primo testo dell'intro
-            String result = engine.processCommand("avanti");
-            renderer.setNarrativeText(result);
+            // Mostra la prima pagina dell'intro
+            String firstPage = engine.getCurrentPageText();
+            renderer.setNarrativeText(firstPage);
             renderer.setRoom(engine.getCurrentRoomKey());
         } else {
             // Modalità classica: mostra solo messaggio di benvenuto

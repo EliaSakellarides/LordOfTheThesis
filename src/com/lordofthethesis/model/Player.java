@@ -11,12 +11,14 @@ public class Player {
     private List<Item> inventory;
     private int maxInventorySize;
     private int score;
+    private int corruptionLevel; // Livello di corruzione per l'uso dell'Anello
     
     public Player(String name) {
         this.name = name;
         this.inventory = new ArrayList<>();
         this.maxInventorySize = 10;
         this.score = 0;
+        this.corruptionLevel = 0;
     }
     
     public boolean addItem(Item item) {
@@ -65,6 +67,17 @@ public class Player {
         score += points;
     }
     
+    public void addCorruption(int points) {
+        corruptionLevel += points;
+    }
+    
+    public String getCorruptionStatus() {
+        if (corruptionLevel == 0) return "🟢 Puro";
+        if (corruptionLevel <= 2) return "🟡 Leggermente corrotto";
+        if (corruptionLevel <= 4) return "🟠 Corrotto";
+        return "🔴 Molto corrotto";
+    }
+    
     // Getters e Setters
     public String getName() { return name; }
     public Room getCurrentRoom() { return currentRoom; }
@@ -76,4 +89,5 @@ public class Player {
     }
     public List<Item> getInventory() { return inventory; }
     public int getScore() { return score; }
+    public int getCorruptionLevel() { return corruptionLevel; }
 }

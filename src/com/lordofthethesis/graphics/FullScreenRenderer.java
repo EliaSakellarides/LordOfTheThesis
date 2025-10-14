@@ -19,9 +19,9 @@ public class FullScreenRenderer extends JPanel {
     private List<String> inventory = new ArrayList<>();
     
     // Dimensioni
-    private static final int WIDTH = 800;
-    private static final int HEIGHT = 600;
-    private static final int TEXT_BOX_HEIGHT = 120;
+    private static final int WIDTH = 1000;
+    private static final int HEIGHT = 750;
+    private static final int TEXT_BOX_HEIGHT = 250; // Box del testo ancora più grande
     private static final int INVENTORY_SIZE = 40;
     
     // Colori tema scuro elegante
@@ -146,10 +146,10 @@ public class FullScreenRenderer extends JPanel {
         g2d.setStroke(new BasicStroke(3));
         g2d.drawRect(5, boxY + 5, WIDTH - 10, TEXT_BOX_HEIGHT - 10);
         
-        // Disegna il testo narrativo con word wrap
+        // Disegna il testo narrativo con word wrap - USA TUTTO LO SPAZIO!
         g2d.setColor(TEXT_FG);
-        g2d.setFont(new Font("Monospaced", Font.PLAIN, 14));
-        drawWrappedText(g2d, narrativeText, 20, boxY + 30, WIDTH - 40, TEXT_BOX_HEIGHT - 40);
+        g2d.setFont(new Font("Monospaced", Font.PLAIN, 13));
+        drawWrappedText(g2d, narrativeText, 15, boxY + 20, WIDTH - 30, TEXT_BOX_HEIGHT - 30);
     }
     
     private void drawMiniInventory(Graphics2D g2d) {
@@ -215,7 +215,26 @@ public class FullScreenRenderer extends JPanel {
     
     private String getRoomDisplayName(String roomKey) {
         switch (roomKey.toLowerCase()) {
+            case "intro": return ""; // Nessun titolo durante l'intro cinematica
+            case "introsauron": return ""; // Nessun titolo durante l'intro cinematica
             case "contea": return "🏡 LA CONTEA";
+            case "bagend": return "🏡 BAG END";
+            case "spettri": return "👻 CAVALIERI NERI";
+            case "incontro con granpasso relatore": return "⚔️ GRANPASSO";
+            case "granburrone": return "🏰 GRANBURRONE";
+            case "rivendell": return "🏰 RIVENDELL";
+            case "concilio": return "🎭 GRAN CONCILIO";
+            case "granconcilio": return "🎭 GRAN CONCILIO";
+            case "elrond concilio": return "🎭 CONCILIO DI ELROND";
+            case "moria": return "⛰️ MORIA";
+            case "porte di durin": return "🚪 PORTE DI DURIN";
+            case "argonath": return "🗿 ARGONATH";
+            case "balrog": return "🔥 BALROG";
+            case "divisione": return "⚔️ DIVISIONE";
+            case "mordor": return "🌋 MORDOR";
+            case "interno monte fato": return "🔥 MONTE FATO";
+            case "aquile": return "🦅 LE AQUILE";
+            case "seduta": return "🎓 SEDUTA DI LAUREA";
             case "biblioteca": return "📚 BIBLIOTECA";
             case "corridoi": return "🚪 CORRIDOI";
             case "aulamagna": return "🎓 AULA MAGNA";
@@ -249,35 +268,68 @@ public class FullScreenRenderer extends JPanel {
         
         FontMetrics fm = g2d.getFontMetrics();
         int lineHeight = fm.getHeight();
-        int currentY = y;
+        int currentY = y + fm.getAscent(); // Inizia dalla baseline
+        int maxY = y + maxHeight;
         
-        // Splitto il testo in parole
-        String[] words = text.split(" ");
-        StringBuilder line = new StringBuilder();
+        // Prima separa per \n (ritorni a capo espliciti)
+        String[] paragraphs = text.split("\n", -1); // -1 per mantenere i paragrafi vuoti
         
-        for (String word : words) {
-            String testLine = line + (line.length() > 0 ? " " : "") + word;
-            int testWidth = fm.stringWidth(testLine);
+        for (int p = 0; p < paragraphs.length; p++) {
+            String paragraph = paragraphs[p];
             
-            if (testWidth > maxWidth && line.length() > 0) {
-                // Disegna la linea corrente
-                g2d.drawString(line.toString(), x, currentY);
-                currentY += lineHeight;
-                line = new StringBuilder(word);
-                
-                // Stop se supera l'altezza massima
-                if (currentY > y + maxHeight) {
-                    g2d.drawString("...", x, currentY - lineHeight);
-                    return;
+            // Se il paragrafo è vuoto (riga vuota), salta una riga
+            if (paragraph.trim().isEmpty()) {
+                if (p > 0) { // Non aggiungere spazio all'inizio
+                    currentY += lineHeight;
+                    if (currentY > maxY) return;
                 }
-            } else {
-                line = new StringBuilder(testLine);
+                continue;
             }
-        }
-        
-        // Disegna l'ultima linea
-        if (line.length() > 0) {
-            g2d.drawString(line.toString(), x, currentY);
+            
+            // Poi gestisci il word wrap per ogni paragrafo
+            String[] words = paragraph.trim().split("\\s+"); // Split per spazi multipli
+            StringBuilder line = new StringBuilder();
+            
+            for (String word : words) {
+                if (word.isEmpty()) continue;
+                
+                // Testa se la parola + spazio entra nella riga corrente
+                String testLine = line.length() > 0 ? line + " " + word : word;
+                int testWidth = fm.stringWidth(testLine);
+                
+                if (testWidth > maxWidth && line.length() > 0) {
+                    // La riga è piena, disegnala
+                    g2d.drawString(line.toString(), x, currentY);
+                    currentY += lineHeight;
+                    
+                    // Controlla se c'è ancora spazio
+                    if (currentY > maxY) {
+                        return; // Tronca silenziosamente
+                    }
+                    
+                    // Inizia nuova riga con la parola corrente
+                    line = new StringBuilder(word);
+                } else if (testWidth > maxWidth && line.length() == 0) {
+                    // La parola singola è troppo lunga, disegnala comunque troncata
+                    g2d.drawString(word, x, currentY);
+                    currentY += lineHeight;
+                    
+                    if (currentY > maxY) {
+                        return;
+                    }
+                } else {
+                    // La parola entra nella riga
+                    line = new StringBuilder(testLine);
+                }
+            }
+            
+            // Disegna l'ultima linea del paragrafo
+            if (line.length() > 0) {
+                if (currentY <= maxY) {
+                    g2d.drawString(line.toString(), x, currentY);
+                    currentY += lineHeight;
+                }
+            }
         }
     }
 }

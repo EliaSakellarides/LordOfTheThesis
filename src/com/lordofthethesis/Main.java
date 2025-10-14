@@ -12,7 +12,7 @@ import javax.swing.*;
  * Features:
  * - 10 story chapters with puzzles
  * - Custom pixel art images
- * - 8-bit chiptune soundtrack
+ * - chiptune soundtrack
  * - Cinematic intro sequence
  * 
  * @author Elia Sakellarides

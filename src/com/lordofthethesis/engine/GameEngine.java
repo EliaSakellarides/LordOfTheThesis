@@ -25,6 +25,10 @@ public class GameEngine {
     private boolean inCinematicIntro;
     private int introStep;
     private String[] introTexts;
+    // Paginazione testo lungo
+    private String fullText; // Testo completo da mostrare
+    private int textPage; // Pagina corrente (0, 1, 2...)
+    private boolean hasMorePages; // Se ci sono altre pagine
     
     public GameEngine() {
         this.allRooms = new HashMap<>();
@@ -37,6 +41,9 @@ public class GameEngine {
         this.audioManager = new AudioManager();
         this.inCinematicIntro = false;
         this.introStep = 0;
+        this.fullText = "";
+        this.textPage = 0;
+        this.hasMorePages = false;
         
         // Testi dell'intro cinematica (come nel film!)
         this.introTexts = new String[]{
@@ -44,44 +51,17 @@ public class GameEngine {
             "           🌋 IL SIGNORE DEGLI ANELLI 🌋\n" +
             "              LA COMPAGNIA DELLA TESI\n" +
             "═══════════════════════════════════════════════════════════\n\n" +
-            "\"Il mondo è cambiato.\n" +
-            "Lo sento nell'acqua.\n" +
-            "Lo sento nella terra.\n" +
-            "Lo odoro nell'aria.\n\n" +
-            "Molto di ciò che era è andato perduto,\n" +
-            "poiché ora non vive più nessuno che lo ricordi.\"\n\n" +
-            "Scrivi 'avanti' per continuare...",
-            
-            "\"Tutto ebbe inizio con la forgiatura delle Grandi Tesi.\n\n" +
-            "💍 Tre furono donate agli Elfi,\n" +
-            "   immortali, saggi e giusti.\n\n" +
-            "💍 Sette ai Signori dei Nani,\n" +
-            "   scavatori nelle profondità delle montagne.\n\n" +
-            "💍 E nove, nove tesi furono donate agli Uomini,\n" +
-            "   che sopra ogni cosa desiderano il potere.\"\n\n" +
-            "Scrivi 'avanti' per continuare...",
-            
-            "\"Ma tutti furono ingannati,\n" +
-            "perché fu creata un'altra Tesi.\n\n" +
-            "🌋 Nelle fiamme del Monte Fato,\n" +
-            "il Signore Oscuro Sauron forgiò in segreto\n" +
-            "una TESI SUPREMA per controllarle tutte.\n\n" +
-            "E in questa Tesi versò la sua crudeltà,\n" +
-            "la sua malvagità e la sua volontà\n" +
-            "di dominare ogni forma di vita.\"\n\n" +
-            "Scrivi 'avanti' per continuare...",
-            
-            "═══════════════════════════════════════════════════════════\n" +
-            "              💍 LA TESI UNICA 💍\n" +
-            "═══════════════════════════════════════════════════════════\n\n" +
-            "    UNA TESI PER DOMINARLE TUTTE\n" +
-            "    UNA TESI PER TROVARLE\n" +
-            "    UNA TESI PER GHERMIRLE\n" +
-            "    E NEL BUIO INCATENARLE\n\n" +
-            "Questa Tesi ha il potere di dare la laurea con lode...\n" +
-            "Ma può anche corrompere chi la possiede.\n\n" +
-            "Deve essere distrutta. A Mordor, dove fu forgiata.\"\n\n" +
-            "Scrivi 'avanti' per iniziare il viaggio..."
+            "Nelle fiamme del Monte Fato, il Signore Oscuro Sauron\n" +
+            "forgiò in segreto una TESI SUPREMA per controllare\n" +
+            "tutte le altre tesi della Terra di Mezzo.\n\n" +
+            "💍 UNA TESI PER DOMINARLE TUTTE 💍\n" +
+            "💍 UNA TESI PER TROVARLE 💍\n" +
+            "💍 UNA TESI PER GHERMIRLE 💍\n" +
+            "💍 E NEL BUIO INCATENARLE 💍\n\n" +
+            "Questa Tesi ha il potere di dare la laurea con lode,\n" +
+            "ma corrompe chiunque la possieda.\n\n" +
+            "Deve essere distrutta. A Mordor, dove fu forgiata.\n\n" +
+            "Premi INVIO per iniziare il viaggio..."
         };
     }
     
@@ -134,12 +114,7 @@ public class GameEngine {
         storyChapters.add(new Level(
             "cap1_sauron",
             "Prologo - Sauron forgia la Tesi",
-            "� Nelle fiamme del Monte Fato, Sauron forgia la TESI UNICA!\n\n" +
-            "💍 'UNA TESI PER DOMINARLE TUTTE' 💍\n\n" +
-            "Questa tesi ha il potere di dare la laurea con lode...\n" +
-            "Ma corrompe chi la possiede!\n\n" +
-            "Deve essere distrutta dove fu creata: a Mordor.\n\n" +
-            "❓ Per iniziare il viaggio, quanto fa 1 + 1?",
+            "🔥 Nelle fiamme del Monte Fato, Sauron forgia la TESI UNICA! 💍 'UNA TESI PER DOMINARLE TUTTE' 💍. Questa tesi ha il potere di dare la laurea con lode... Ma corrompe chi la possiede! Deve essere distrutta dove fu creata: a Mordor.\n\n❓ Per iniziare il viaggio, quanto fa 1 + 1?",
             Arrays.asList("2", "due"),
             "La somma più semplice!"
         ));
@@ -148,12 +123,7 @@ public class GameEngine {
         storyChapters.add(new Level(
             "cap2_contea",
             "La Contea - Casa tua",
-            "� Sei nella tranquilla Contea, tra verdi colline.\n\n" +
-            "Hai appena finito di scrivere la tua TESI.\n" +
-            "Ma c'è qualcosa di strano... sembra avere un potere oscuro.\n\n" +
-            "Il tuo relatore (un certo Gandalf) ti ha avvertito:\n" +
-            "'Questa tesi è pericolosa! Devi portarla a Gran Burrone!'\n\n" +
-            "❓ Prima di partire: qual è il colore dell'erba?",
+            "🏡 Sei nella tranquilla Contea, tra verdi colline. Hai appena finito di scrivere la tua TESI. Ma c'è qualcosa di strano... sembra avere un potere oscuro. Il tuo relatore (un certo Gandalf) ti ha avvertito: 'Questa tesi è pericolosa! Devi portarla a Gran Burrone!'\n\n❓ Prima di partire: qual è il colore dell'erba?",
             Arrays.asList("verde", "green"),
             "Guarda fuori dalla finestra!"
         ));
@@ -165,8 +135,7 @@ public class GameEngine {
             "🎂 Sei alla grande festa del 111° compleanno di Bilbo!\n\n" +
             "Fuochi d'artificio, cibo delizioso, hobbit che ballano.\n" +
             "Bilbo fa un discorso misterioso:\n\n" +
-            "💍 'Lascio tutto a te, caro cugino!'\n" +
-            "'Prenditi cura della TESI. È più importante di quanto pensi.'\n\n" +
+            "💍 'Lascio tutto a te, caro cugino! Prenditi cura della TESI. È più importante di quanto pensi. '\n" +
             "Bilbo scompare con un lampo! (Aveva l'Anello dell'Invisibilità)\n\n" +
             "Gandalf ti prende da parte:\n" +
             "'Devi partire STANOTTE. Gli Spettri ti cercano!'\n\n" +
@@ -251,44 +220,153 @@ public class GameEngine {
             "Conta tutti: tu + Gandalf + Aragorn + Legolas + Gimli + Boromir + 3 hobbit"
         ));
         
-        // CAPITOLO 8: VERSO MORDOR
+        // CAPITOLO 8: LE PORTE DI DURIN - MORIA
         storyChapters.add(new Level(
-            "cap8_viaggio",
-            "Il Viaggio verso Mordor",
-            "⛰️ La Compagnia inizia il viaggio verso Mordor!\n\n" +
-            "Attraversate foreste, montagne, fiumi.\n" +
-            "Aragorn (il tuo relatore) ti guida:\n" +
-            "'La strada è lunga, ma ce la farai!'\n\n" +
-            "Gandalf ti incoraggia:\n" +
-            "'La TESI sarà distrutta, e tu sarai libero!'\n\n" +
-            "Giorni di marcia... notti sotto le stelle...\n" +
-            "La Torre di Sauron si avvicina all'orizzonte.\n\n" +
-            "❓ Per mantenerti concentrato: quanto fa 6 + 2?",
+            "cap8_moria",
+            "Le Porte di Durin",
+            "⛰️🚪 La Compagnia arriva alle Porte di Durin!\n\n" +
+            "Siete davanti a un'enorme parete di roccia.\n" +
+            "Gandalf accende il suo bastone...\n\n" +
+            "E sulla roccia appaiono simboli elfici luminosi!\n" +
+            "✨ Le Porte di Durin, Signore di Moria.\n" +
+            "   Parla, amico, ed entra. ✨\n\n" +
+            "Gandalf: 'È un indovinello! La risposta apre la porta.'\n\n" +
+            "Boromir tenta di forzare la porta: nulla.\n" +
+            "Gimli prova con la sua ascia: nulla.\n\n" +
+            "Gandalf riflette ad alta voce:\n" +
+            "'Parla, amico, ed entra...'\n" +
+            "'La risposta è nell'indovinello stesso!'\n\n" +
+            "❓ Quale parola in elfico significa 'amico'?",
+            Arrays.asList("mellon", "Mellon", "MELLON"),
+            "La parola elfica per 'amico' è scritta nell'indovinello!"
+        ));
+        
+        // CAPITOLO 9: GLI ARGONATH - I PILASTRI DEI RE
+        storyChapters.add(new Level(
+            "cap9_argonath",
+            "Gli Argonath - Pilastri dei Re",
+            "🗿 La Compagnia naviga sul Grande Fiume!\n\n" +
+            "Improvvisamente, davanti a voi appaiono due statue ENORMI!\n" +
+            "⛰️ GLI ARGONATH - I PILASTRI DEI RE! ⛰️\n\n" +
+            "Due antichi re di Gondor scolpiti nella roccia.\n" +
+            "Alti come montagne, maestosi, imponenti.\n\n" +
+            "Aragorn si alza in piedi nella barca:\n" +
+            "'Ecco i miei antenati. Un giorno riprenderò il trono.'\n\n" +
+            "Gandalf: 'Stiamo entrando nelle terre pericolose.\n" +
+            "Presto dovremo decidere: andare a est o ovest.'\n\n" +
+            "Boromir guarda la tua TESI con desiderio...\n" +
+            "La Compagnia inizia a mostrare tensione.\n\n" +
+            "❓ Per mantenere l'unità: quante statue compongono gli Argonath?",
+            Arrays.asList("2", "due"),
+            "Conta i Pilastri dei Re!"
+        ));
+        
+        // CAPITOLO 10: MORIA - IL BALROG
+        storyChapters.add(new Level(
+            "cap10_balrog",
+            "Moria - La Caduta di Gandalf",
+            "⛏️ La Compagnia attraversa le Miniere di Moria!\n\n" +
+            "Tunnel oscuri, echi sinistri, scheletri di nani ovunque.\n" +
+            "Gimli piange: 'Balin... il mio cugino è morto qui...'\n\n" +
+            "Improvvisamente: FUOCO E OMBRA!\n" +
+            "🔥👹 UN BALROG! UN DEMONE DELL'ANTICO MONDO! 👹🔥\n\n" +
+            "Gandalf: 'CORRETE, SCIOCCHI!'\n\n" +
+            "Correte verso il Ponte di Khazad-dûm!\n" +
+            "Gandalf si volta: 'NON PUOI PASSARE!'\n\n" +
+            "⚔️ Gandalf combatte il Balrog sul ponte!\n" +
+            "Il ponte crolla... il Balrog cade negli abissi!\n\n" +
+            "Ma la sua frusta afferra Gandalf! 😱\n" +
+            "Gandalf: 'Fuggite, stolti!' e si lascia cadere.\n\n" +
+            "💔 GANDALF È CADUTO!\n\n" +
+            "❓ Nel dolore, ricordi: quanto fa 9 - 1?",
             Arrays.asList("8", "otto"),
+            "Eravate 9, ora siete..."
+        ));
+        
+        // CAPITOLO 11: AMON HEN - LA DIVISIONE
+        storyChapters.add(new Level(
+            "cap11_divisione",
+            "Amon Hen - La Compagnia si Divide",
+            "🌳 Dopo la perdita di Gandalf, arrivate ad Amon Hen.\n\n" +
+            "La Compagnia è distrutta dal dolore.\n" +
+            "Boromir ti prende da parte:\n\n" +
+            "'Dammi la TESI! Possiamo usarla per vincere la guerra!'\n" +
+            "'Gondor ha bisogno di potere! Dammela!'\n\n" +
+            "Tu rifiuti. Boromir impazzisce e ti attacca!\n" +
+            "Ma poi si ferma: 'Cosa sto facendo? Perdonami!'\n\n" +
+            "🏹 Improvviso attacco di Orchi!\n" +
+            "Boromir si sacrifica per proteggere i tuoi amici hobbit!\n\n" +
+            "Aragorn: 'La Compagnia si è spezzata.'\n" +
+            "'Ma tu devi continuare verso Mordor!'\n\n" +
+            "Tu decidi: andrò da solo a Mordor.\n" +
+            "Ma Sam ti segue: 'Non ti lascio andare da solo!'\n\n" +
+            "💪 TU E SAM VERSO MORDOR! LA COMPAGNIA SI DIVIDE!\n\n" +
+            "❓ Quanti hobbit vanno verso Mordor?",
+            Arrays.asList("2", "due"),
+            "Tu e Sam!"
+        ));
+        
+        // CAPITOLO 12: VIAGGIO CON SAM
+        storyChapters.add(new Level(
+            "cap12_sam",
+            "Il Viaggio con Sam",
+            "⛰️ Tu e Sam camminate verso Mordor.\n\n" +
+            "Giorni e giorni di marcia solitaria.\n" +
+            "La TESI pesa sempre di più, fisicamente e mentalmente.\n\n" +
+            "Sam ti incoraggia:\n" +
+            "'Andrò con te fino alla fine, fino alla distruzione della Tesi!'\n\n" +
+            "Vi nutrite di Lembas (pane elfico).\n" +
+            "La Torre di Sauron si avvicina all'orizzonte.\n\n" +
+            "Sam nota che sei cambiato:\n" +
+            "'La Tesi ti sta consumando...'\n\n" +
+            "Ma vai avanti. Per la Contea. Per i tuoi amici.\n\n" +
+            "❓ Per mantenerti concentrato: quanto fa 5 + 5?",
+            Arrays.asList("10", "dieci"),
             "Somma!"
         ));
         
-        // CAPITOLO 9: ALLE PORTE DI MORDOR
+        // CAPITOLO 13: ALLE PORTE DI MORDOR
         storyChapters.add(new Level(
-            "cap9_mordor",
+            "cap13_mordor",
             "Mordor - Il Cancello Nero",
             "🌋 Eccoci. MORDOR.\n\n" +
             "Il cielo è rosso fuoco. L'aria è irrespirabile.\n" +
             "La Torre di Sauron si erge minacciosa.\n" +
             "L'Occhio ti cerca...\n\n" +
-            "Aragorn: 'Io e la Compagnia attaccheremo il Cancello.'\n" +
+            "🦅 Improvvisamente: le AQUILE!\n" +
+            "Gandalf è tornato! È rinato come Gandalf il Bianco!\n\n" +
+            "Gandalf: 'La battaglia finale è iniziata!'\n" +
+            "'Io e Aragorn attaccheremo il Cancello Nero!'\n" +
             "'Tu entra in Mordor mentre siamo distratti!'\n\n" +
-            "Gandalf: 'Vai! È il tuo momento!'\n\n" +
             "🗡️ La battaglia ha inizio!\n" +
-            "Mentre i tuoi amici combattono, tu corri verso il Monte Fato.\n\n" +
-            "❓ Per trovare la forza: quanto fa 3 + 3?",
-            Arrays.asList("6", "sei"),
-            "Somma semplice per l'ultimo sforzo!"
+            "Mentre i tuoi amici combattono, tu e Sam correte verso il Monte Fato.\n\n" +
+            "❓ Per trovare la forza: quanto fa 7 + 7?",
+            Arrays.asList("14", "quattordici"),
+            "Ultimo sforzo!"
         ));
         
-        // CAPITOLO 10: MONTE FATO - FINALE
+        // CAPITOLO 14: MONTE FATO - INTERNO
         storyChapters.add(new Level(
-            "cap10_finale",
+            "cap14_montefato",
+            "Monte Fato - La Scalata",
+            "🌋 STAI SCALANDO IL MONTE FATO!\n\n" +
+            "Lava scorre ai tuoi piedi. Fumo e cenere ovunque.\n" +
+            "Il calore è insopportabile.\n\n" +
+            "Sam: 'Forza! Ci siamo quasi!'\n\n" +
+            "Ma la TESI pesa troppo...\n" +
+            "Le gambe cedono... non ce la fai più...\n\n" +
+            "Sam: 'NON POSSO PORTARE LA TESI PER TE...'\n" +
+            "'MA POSSO PORTARE TE! FORZA!'\n\n" +
+            "🥺 Sam ti prende sulle spalle!\n" +
+            "💪 Con l'ultimo sforzo, arrivate alla Voragine del Fato!\n\n" +
+            "❓ Chi è il vero eroe? Scrivi il suo nome:",
+            Arrays.asList("sam", "Sam", "SAM", "samvise"),
+            "Il giardiniere fedele!"
+        ));
+        
+        // CAPITOLO 15: LA DISTRUZIONE - FINALE
+        storyChapters.add(new Level(
+            "cap15_finale",
             "Monte Fato - La Distruzione della Tesi",
             "🌋🔥 SEI AL MONTE FATO! 🔥🌋\n\n" +
             "Hai scalato la montagna fumante.\n" +
@@ -299,10 +377,57 @@ public class GameEngine {
             "'NOOO! L'ANELLO È MIO!' urla nella tua mente.\n\n" +
             "Ma resisti! Pensi ad Aragorn, a Gandalf, alla Compagnia.\n" +
             "Pensi alla tua LAUREA!\n\n" +
-            "Alzi la TESI sopra la testa...\n\n" +
+            "🔥 LANCI LA TESI NELLA LAVA! 🔥\n\n" +
+            "La Tesi brucia! L'Occhio di Sauron urla!\n" +
+            "La Torre Oscura crolla! MORDOR STA CROLLANDO!\n\n" +
+            "Sam: 'È finita! CE L'ABBIAMO FATTA!'\n\n" +
+            "Ma il Monte Fato sta esplodendo intorno a voi...\n" +
+            "Non c'è via d'uscita...\n\n" +
             "❓ Per completare il viaggio, scrivi: FINE",
             Arrays.asList("fine", "FINE", "Fine"),
             "Scrivi la parola 'fine'!"
+        ));
+        
+        // CAPITOLO 16: LE AQUILE - IL SALVATAGGIO
+        storyChapters.add(new Level(
+            "cap16_aquile",
+            "Il Salvataggio delle Aquile",
+            "🦅🦅🦅 LE AQUILE! LE AQUILE STANNO ARRIVANDO! 🦅🦅🦅\n\n" +
+            "Mentre tutto crolla, senti un grido nel cielo!\n\n" +
+            "GWAIHIR, il Signore delle Aquile, scende in picchiata!\n" +
+            "Ti afferra con Sam e vi porta via dal Monte Fato!\n\n" +
+            "Volate sopra Mordor che crolla.\n" +
+            "La Torre di Sauron cade in polvere.\n" +
+            "L'Occhio si spegne per sempre.\n\n" +
+            "Gandalf (su un'altra aquila): 'BEN FATTO, PORTATORE DELLA TESI!'\n\n" +
+            "Le Aquile vi portano a Gran Burrone.\n" +
+            "Sei salvo. La missione è compiuta.\n\n" +
+            "❓ Quante aquile ti hanno salvato? (Tu, Sam, Gandalf = 3 aquile)",
+            Arrays.asList("3", "tre"),
+            "Conta le aquile che portano eroi!"
+        ));
+        
+        // CAPITOLO 17: LA LAUREA - EPILOGO
+        storyChapters.add(new Level(
+            "cap17_laurea",
+            "La Seduta di Laurea",
+            "🎓👑 SEI TORNATO A GRAN BURRONE! 🎓👑\n\n" +
+            "Tutti i tuoi amici ti aspettano:\n" +
+            "- 🧙‍♂️ Gandalf il Bianco (il tuo mentore)\n" +
+            "- 👑 Aragorn, ora RE di Gondor (il tuo relatore)\n" +
+            "- 🧝 Legolas (il correlatore elfico)\n" +
+            "- 🪓 Gimli (il correlatore nano)\n" +
+            "- 🌿 Sam (il tuo migliore amico)\n\n" +
+            "Elrond: 'Oggi è un giorno glorioso!'\n" +
+            "'Il Portatore della Tesi ha compiuto l'impossibile!'\n\n" +
+            "Aragorn ti mette una corona sul capo:\n" +
+            "'Per il tuo coraggio e sacrificio...'\n" +
+            "'TI PROCLAMO DOTTORE DELLA TERRA DI MEZZO!'\n\n" +
+            "🎊🎉 HAI VINTO! SEI LAUREATO CON LODE! 🎉🎊\n\n" +
+            "Sam sorride: 'Sapevo che ce l'avresti fatta!'\n\n" +
+            "❓ Sei pronto per tornare alla Contea? Scrivi: CASA",
+            Arrays.asList("casa", "CASA", "Casa"),
+            "Torna a casa, eroe!"
         ));
         
         currentChapter = 0;
@@ -450,12 +575,42 @@ public class GameEngine {
         
         Room concilio = new Room("concilio", "🗣️ Sala del Concilio di Elrond");
         
+        // NUOVE STANZE PER I 17 CAPITOLI - Immagini specifiche
+        Room introsauron = new Room("introsauron", "🔥 Sauron - Il Signore Oscuro");
+        Room cenaBagEnd = new Room("Cena a Bag End di Bilbo", "🎂 Cena a Bag End");
+        Room obbitTronco = new Room("obbit sotto il tronco", "🌳 Hobbit nascosti dagli Spettri");
+        Room granburrone = new Room("granburrone", "🏰 Gran Burrone - Rivendell");
+        Room granconcilio = new Room("granconcilio", "👥 Il Gran Concilio");
+        Room rivendell = new Room("rivendell", "🏰 Rivendell - Casa di Elrond");
+        Room porteDurin = new Room("porte di durin", "🚪 Le Porte di Durin");
+        Room argonath = new Room("argonath", "🗿 Gli Argonath - Pilastri dei Re");
+        Room balrog = new Room("balrog", "🔥 Moria - Il Balrog");
+        Room divisione = new Room("divisione", "🌳 Amon Hen - La Divisione");
+        Room internoMonteFato = new Room("interno monte fato", "🌋 Monte Fato - Interno");
+        Room tesiCheBrucia = new Room("tesi che brucia", "🔥 La Distruzione della Tesi");
+        Room aquile = new Room("aquile", "🦅 Le Aquile");
+        Room palazzoAule = new Room("palazzo delle aule", "🎓 Palazzo delle Aule - Università");
+        
         // Salvataggio riferimenti - MAPPA LOTR CON NUOVE STANZE
         allRooms.put("intro", intro);
+        allRooms.put("introsauron", introsauron);
         allRooms.put("bagend", bagEnd);
+        allRooms.put("Cena a Bag End di Bilbo", cenaBagEnd);
         allRooms.put("spettri", spettri);
+        allRooms.put("obbit sotto il tronco", obbitTronco);
         allRooms.put("incontro con granpasso relatore", incontroRelatore);
         allRooms.put("concilio", concilio);
+        allRooms.put("granburrone", granburrone);
+        allRooms.put("granconcilio", granconcilio);
+        allRooms.put("rivendell", rivendell);
+        allRooms.put("porte di durin", porteDurin);
+        allRooms.put("argonath", argonath);
+        allRooms.put("balrog", balrog);
+        allRooms.put("divisione", divisione);
+        allRooms.put("interno monte fato", internoMonteFato);
+        allRooms.put("tesi che brucia", tesiCheBrucia);
+        allRooms.put("aquile", aquile);
+        allRooms.put("palazzo delle aule", palazzoAule);
         allRooms.put("contea", contea);
         allRooms.put("granburrone", granBurrone);
         allRooms.put("moria", minieraMoria);
@@ -480,6 +635,30 @@ public class GameEngine {
         
         // MODALITÀ NARRATIVA - Gestione comandi
         if (narrativeMode) {
+            // Se siamo nell'intro cinematica, gestisci la paginazione
+            if (inCinematicIntro) {
+                if (hasMorePages && (action.equals("avanti") || action.equals("continua") || action.equals("prosegui"))) {
+                    // Se ci sono altre pagine dell'intro, mostra la prossima
+                    nextPage();
+                    String pageText = getCurrentPageText();
+                    
+                    // Se non ci sono più pagine, esci dall'intro
+                    if (!hasMorePages) {
+                        inCinematicIntro = false;
+                        resetPagination();
+                        return pageText + "\n\n" + startNextChapter();
+                    }
+                    
+                    return pageText;
+                } else if (!hasMorePages && (action.equals("avanti") || action.equals("continua") || action.equals("prosegui"))) {
+                    // Esci dall'intro e inizia il gioco
+                    inCinematicIntro = false;
+                    resetPagination();
+                    return startNextChapter();
+                }
+                return "Premi INVIO/SPAZIO o digita 'avanti' per continuare...";
+            }
+            
             switch (action) {
                 case "avanti":
                 case "continua":
@@ -491,6 +670,12 @@ public class GameEngine {
                         return "Devi scrivere una risposta! Usa: rispondi [risposta]";
                     }
                     return answerChapter(target);
+                
+                case "scegli":
+                    if (target.isEmpty()) {
+                        return "Devi scegliere un'opzione! Usa: scegli A (o B, o C)";
+                    }
+                    return processChoice(target.trim().toUpperCase());
                     
                 case "aiuto":
                     return getNarrativeHelpText();
@@ -502,6 +687,11 @@ public class GameEngine {
                 case "inventario":
                 case "zaino":
                     return player.getInventoryString();
+                
+                case "corruzione":
+                case "status":
+                    return "💍 Livello di corruzione: " + player.getCorruptionLevel() + 
+                           " - " + player.getCorruptionStatus();
                     
                 case "esci":
                 case "quit":
@@ -509,7 +699,7 @@ public class GameEngine {
                     return "Grazie per aver giocato a Il Signore degli Anelli!";
                     
                 default:
-                    return "Comando non riconosciuto. Usa 'avanti' per il prossimo capitolo, 'rispondi [risposta]' per rispondere, 'aiuto' per info.";
+                    return "Comando non riconosciuto. Usa 'avanti' per il prossimo capitolo, 'rispondi [risposta]' per rispondere, 'scegli [A/B/C]' per scegliere, 'aiuto' per info.";
             }
         }
         
@@ -741,8 +931,13 @@ public class GameEngine {
                      "💡 Usa: rispondi [risposta]\n" +
                      "═══════════════════════════════════════════════════════════";
         
+        // Imposta il testo per la paginazione
+        fullText = msg;
+        textPage = 0;
+        hasMorePages = true; // Forza paginazione attiva
+        
         addLog(msg);
-        return msg;
+        return getCurrentPageText(); // Restituisci la prima pagina
     }
     
     private String answerChapter(String answer) {
@@ -797,19 +992,143 @@ public class GameEngine {
         }
     }
     
+    /**
+     * Gestisce le scelte narrative (A/B/C)
+     */
+    private String processChoice(String choice) {
+        // Per ora, implementiamo una logica di base
+        // In futuro, ogni capitolo potrà avere le proprie scelte
+        
+        if (!choice.matches("[ABC]")) {
+            return "❌ Scelta non valida! Devi scegliere A, B o C.\nUsa: scegli A (o scegli B, o scegli C)";
+        }
+        
+        String result = "";
+        
+        // Esempio di scelta: quando incontri i Cavalieri Neri (capitolo 4)
+        if (currentChapter == 3) { // Capitolo Spettri
+            switch (choice) {
+                case "A":
+                    result = "🏃 SCEGLI DI CORRERE!\n\n" +
+                            "Corri a perdifiato nella notte!\n" +
+                            "I Cavalieri Neri ti inseguono!\n" +
+                            "Ma riesci a nasconderti sotto un albero cavo.\n\n" +
+                            "✅ Sei salvo! (Nessuna corruzione)\n\n" +
+                            "Scrivi 'avanti' per continuare...";
+                    break;
+                case "B":
+                    result = "💍 SCEGLI DI USARE L'ANELLO!\n\n" +
+                            "Indossi l'Anello per diventare invisibile!\n" +
+                            "I Cavalieri Neri NON TI VEDONO!\n\n" +
+                            "Ma... l'Occhio di Sauron TI HA VISTO! 👁️\n" +
+                            "L'Anello ti ha corrotto un po'...\n\n" +
+                            "⚠️ +1 Corruzione ⚠️\n\n" +
+                            "Scrivi 'avanti' per continuare...";
+                    player.addCorruption(1);
+                    break;
+                case "C":
+                    result = "⚔️ SCEGLI DI COMBATTERE!\n\n" +
+                            "Estrai la tua spada e affronti gli Spettri!\n\n" +
+                            "❌ GAME OVER ❌\n\n" +
+                            "Non puoi combattere i Cavalieri Neri da solo!\n" +
+                            "Sei stato catturato...\n\n" +
+                            "La tua avventura finisce qui.";
+                    gameRunning = false;
+                    break;
+            }
+        }
+        // Esempio: quando Boromir vuole la Tesi (capitolo 11)
+        else if (currentChapter == 10) { // Capitolo Divisione
+            switch (choice) {
+                case "A":
+                    result = "🤝 SCEGLI DI DARE LA TESI A BOROMIR!\n\n" +
+                            "Boromir prende la Tesi... e IMPAZZISCE!\n" +
+                            "'È MIA! IL POTERE È MIO!'\n\n" +
+                            "❌ GAME OVER ❌\n\n" +
+                            "La Tesi ha corrotto Boromir.\n" +
+                            "Sauron vince. La Terra di Mezzo è perduta.";
+                    gameRunning = false;
+                    break;
+                case "B":
+                    result = "💍 SCEGLI DI USARE L'ANELLO PER SCAPPARE!\n\n" +
+                            "Indossi l'Anello e diventi invisibile!\n" +
+                            "Scappi da Boromir!\n\n" +
+                            "Ma l'Anello ti corrompe ancora...\n\n" +
+                            "⚠️ +2 Corruzione ⚠️\n\n" +
+                            "Scrivi 'avanti' per continuare...";
+                    player.addCorruption(2);
+                    break;
+                case "C":
+                    result = "🗣️ SCEGLI DI CONVINCERE BOROMIR!\n\n" +
+                            "'Boromir, l'Anello ti sta corrompendo!'\n" +
+                            "'Ricorda chi sei! Sei un guerriero di Gondor!'\n\n" +
+                            "Boromir si ferma: 'Cosa... cosa sto facendo?'\n" +
+                            "'Perdonami! Avevi ragione!'\n\n" +
+                            "✅ Hai salvato Boromir! (Nessuna corruzione)\n\n" +
+                            "Scrivi 'avanti' per continuare...";
+                    break;
+            }
+        }
+        // Esempio: al Monte Fato - momento decisivo!
+        else if (currentChapter == 14) { // Capitolo Monte Fato interno
+            switch (choice) {
+                case "A":
+                    result = "💍 SCEGLI DI TENERE L'ANELLO!\n\n" +
+                            "'L'Anello è MIO!'\n\n" +
+                            "❌ GAME OVER - FINALE CATTIVO ❌\n\n" +
+                            "Sei diventato come Gollum.\n" +
+                            "Sauron vince. La Terra di Mezzo cade nelle tenebre.";
+                    gameRunning = false;
+                    break;
+                case "B":
+                    result = "🌋 SCEGLI DI DISTRUGGERE LA TESI!\n\n" +
+                            "Con l'ultimo sforzo, lanci la Tesi nella lava!\n\n" +
+                            "🔥 LA TESI BRUCIA! 🔥\n\n" +
+                            "Sauron urla! La Torre crolla!\n" +
+                            "L'Occhio si spegne!\n\n" +
+                            "✅ VITTORIA! ✅\n\n" +
+                            "Scrivi 'avanti' per il finale...";
+                    break;
+                case "C":
+                    result = "🤔 SCEGLI DI ESITARE...\n\n" +
+                            "Non riesci a decidere...\n" +
+                            "L'Anello ti chiama... 'Non distruggermi!'\n\n" +
+                            "Sam: 'FORZA! FALLO ORA!'\n\n" +
+                            "⚠️ +1 Corruzione ⚠️\n\n" +
+                            "Scrivi 'scegli B' per distruggere la tesi!";
+                    player.addCorruption(1);
+                    break;
+            }
+        }
+        else {
+            result = "🤔 Non ci sono scelte da fare in questo capitolo.\n" +
+                    "Usa 'avanti' per proseguire o 'rispondi [risposta]' per l'enigma.";
+        }
+        
+        addLog(result);
+        return result;
+    }
+    
     private void updateRoomByChapter(int chapterIndex) {
         // Cambia la stanza corrente in base al capitolo per aggiornare l'immagine
         String[] roomKeys = {
-            "intro",                             // Cap 1: Sauron forgia la Tesi
+            "introsauron",                       // Cap 1: Sauron forgia la Tesi (intro specifica)
             "contea",                            // Cap 2: La Contea
-            "bagend",                            // Cap 3: Festa di Bilbo
-            "spettri",                           // Cap 4: Nazgûl
-            "incontro con granpasso relatore",   // Cap 5: Il Relatore salva
-            "granburrone",                       // Cap 6: Rivendell
-            "concilio",                          // Cap 7: Concilio
-            "contea",                            // Cap 8: Verso Mordor (placeholder)
-            "contea",                            // Cap 9: Mordor (placeholder)
-            "contea"                             // Cap 10: Monte Fato (placeholder)
+            "Cena a Bag End di Bilbo",           // Cap 3: Festa di Bilbo (immagine specifica)
+            "obbit sotto il tronco",             // Cap 4: Nazgûl (hobbit si nascondono)
+            "incontro con granpasso relatore",   // Cap 5: Granpasso/Il Relatore
+            "granburrone",                       // Cap 6: Gran Burrone/Rivendell
+            "granconcilio",                      // Cap 7: Gran Concilio di Elrond
+            "porte di durin",                    // Cap 8: Porte di Durin - Moria
+            "argonath",                          // Cap 9: Argonath - Pilastri dei Re
+            "balrog",                            // Cap 10: Balrog in Moria
+            "divisione",                         // Cap 11: Divisione della Compagnia
+            "contea",                            // Cap 12: Viaggio con Sam (ritorno mentale alla Contea)
+            "mordor",                            // Cap 13: Alle porte di Mordor
+            "interno monte fato",                // Cap 14: Monte Fato interno - Scalata
+            "tesi che brucia",                   // Cap 15: Distruzione della Tesi
+            "aquile",                            // Cap 16: Salvataggio delle Aquile
+            "palazzo delle aule"                 // Cap 17: Seduta di Laurea (palazzo università)
         };
         
         // Musiche corrispondenti per ogni capitolo
@@ -821,9 +1140,16 @@ public class GameEngine {
             "granpasso.wav",    // Cap 5: Tema eroico del Relatore
             "rivendell.wav",    // Cap 6: Musica elfica di Rivendell
             "concilio.wav",     // Cap 7: Tema solenne del Concilio
-            "contea.wav",       // Cap 8: Placeholder
-            "contea.wav",       // Cap 9: Placeholder
-            "contea.wav"        // Cap 10: Placeholder
+            "intro.wav",        // Cap 8: Moria (tema epico)
+            "rivendell.wav",    // Cap 9: Argonath (tema maestoso)
+            "intro.wav",        // Cap 10: Balrog (tema epico)
+            "spettri.wav",      // Cap 11: Divisione (tema drammatico)
+            "contea.wav",       // Cap 12: Viaggio con Sam
+            "intro.wav",        // Cap 13: Mordor (tema epico)
+            "intro.wav",        // Cap 14: Monte Fato (tema epico)
+            "intro.wav",        // Cap 15: Distruzione (tema epico)
+            "rivendell.wav",    // Cap 16: Aquile (tema di salvezza)
+            "concilio.wav"      // Cap 17: Laurea (tema trionfale)
         };
         
         // Cambia stanza
@@ -841,15 +1167,18 @@ public class GameEngine {
         return "═══════════════════════════════════════════════════════════\n" +
                "           🎮 COMANDI DISPONIBILI 🎮\n" +
                "═══════════════════════════════════════════════════════════\n\n" +
-               "📖 avanti         - Inizia il prossimo capitolo\n" +
+               "📖 avanti              - Inizia il prossimo capitolo\n" +
                "✍️  rispondi [risposta] - Rispondi all'enigma\n" +
-               "❓ aiuto          - Mostra questo messaggio\n" +
-               "📊 dove/stato     - Mostra progresso nella storia\n" +
-               "🎒 inventario     - Mostra il tuo zaino\n" +
-               "🚪 esci           - Esci dal gioco\n\n" +
+               "⚔️  scegli [A/B/C]     - Fai una scelta narrativa\n" +
+               "💍 corruzione          - Mostra il tuo livello di corruzione\n" +
+               "❓ aiuto               - Mostra questo messaggio\n" +
+               "📊 dove/stato          - Mostra progresso nella storia\n" +
+               "🎒 inventario          - Mostra il tuo zaino\n" +
+               "🚪 esci                - Esci dal gioco\n\n" +
                "═══════════════════════════════════════════════════════════\n" +
                "        Segui la storia del Signore degli Anelli!\n" +
-               "        Risolvi enigmi per avanzare nel viaggio!\n" +
+               "        Risolvi enigmi e fai scelte per avanzare!\n" +
+               "        Attenzione: l'uso dell'Anello corrompe!\n" +
                "═══════════════════════════════════════════════════════════";
     }
     
@@ -860,7 +1189,8 @@ public class GameEngine {
                "👤 Giocatore: " + player.getName() + "\n" +
                "📍 Capitolo: " + (currentChapter + 1) + " / " + storyChapters.size() + "\n" +
                "🏆 Punteggio: " + player.getScore() + " punti\n" +
-               "📍 Posizione: " + player.getCurrentRoom().getName() + "\n\n" +
+               "� Corruzione: " + player.getCorruptionStatus() + " (" + player.getCorruptionLevel() + ")\n" +
+               "�📍 Posizione: " + player.getCurrentRoom().getName() + "\n\n" +
                (currentChapter < storyChapters.size() 
                    ? "📖 Capitolo Corrente: " + storyChapters.get(currentChapter).getTitle()
                    : "✅ Hai completato tutti i capitoli!") + "\n\n" +
@@ -945,9 +1275,106 @@ public class GameEngine {
         introStep = 0;
         // Imposta subito l'immagine di Sauron
         updateRoomByChapter(0);
+        
+        // Prepara il testo dell'intro (breve, per non coprire l'immagine)
+        fullText = "🌋 NEL REGNO OSCURO DI MORDOR 🌋\n\nNei giorni più bui della Terra di Mezzo, uno studente di nome Frodo si ritrova per caso in possesso di un'antica tesi... 💍 L'ANELLO DEL POTERE 💍\n\nQuesta tesi, forgiata nel fuoco del Monte Fato dall'oscuro signore Sauron, ha il potere di controllare tutte le altre tesi accademiche...\n\n[Premi INVIO o SPAZIO per continuare]";
+        textPage = 0;
+        hasMorePages = true;
     }
     
     public boolean isInCinematicIntro() {
         return inCinematicIntro;
+    }
+    
+    // Sistema di paginazione testo
+    public String paginateText(String text, int maxLines) {
+        String[] lines = text.split("\n");
+        int linesPerPage = maxLines;
+        int totalPages = (int) Math.ceil((double) lines.length / linesPerPage);
+        
+        if (textPage >= totalPages) {
+            textPage = totalPages - 1;
+        }
+        
+        int startLine = textPage * linesPerPage;
+        int endLine = Math.min(startLine + linesPerPage, lines.length);
+        
+        StringBuilder page = new StringBuilder();
+        for (int i = startLine; i < endLine; i++) {
+            page.append(lines[i]).append("\n");
+        }
+        
+        hasMorePages = (textPage < totalPages - 1);
+        
+        if (hasMorePages) {
+            page.append("\n[Premi INVIO o SPAZIO per continuare...]");
+        }
+        
+        return page.toString();
+    }
+    
+    public boolean nextPage() {
+        if (fullText.isEmpty()) {
+            hasMorePages = false;
+            return false;
+        }
+        
+        // Calcola prima il numero totale di pagine
+        String[] lines = fullText.split("\n");
+        int linesPerPage = 12; // Ridotto da 20 a 12 per più pagine
+        int totalPages = (int) Math.ceil((double) lines.length / linesPerPage);
+        
+        // Controlla se possiamo avanzare
+        if (textPage < totalPages - 1) {
+            textPage++;
+            hasMorePages = (textPage < totalPages - 1);
+            return true;
+        }
+        hasMorePages = false;
+        return false;
+    }
+    
+    public boolean previousPage() {
+        if (textPage > 0) {
+            textPage--;
+            // Ricalcola hasMorePages
+            if (!fullText.isEmpty()) {
+                String[] lines = fullText.split("\n");
+                int linesPerPage = 12; // Ridotto da 20 a 12 per più pagine
+                int totalPages = (int) Math.ceil((double) lines.length / linesPerPage);
+                hasMorePages = (textPage < totalPages - 1);
+            }
+            return true;
+        }
+        return false;
+    }
+    
+    public void resetPagination() {
+        textPage = 0;
+        hasMorePages = false;
+        fullText = "";
+    }
+    
+    public boolean hasMorePages() {
+        return hasMorePages;
+    }
+    
+    // Debug: info sulla paginazione
+    public String getPaginationInfo() {
+        if (fullText.isEmpty()) {
+            return "fullText: vuoto";
+        }
+        String[] lines = fullText.split("\n");
+        int totalPages = (int) Math.ceil((double) lines.length / 12.0); // Cambiato da 20 a 12
+        return String.format("Page %d/%d (lines: %d, hasMore: %b)", 
+            textPage + 1, totalPages, lines.length, hasMorePages);
+    }
+    
+    // Ottieni il testo della pagina corrente
+    public String getCurrentPageText() {
+        if (fullText.isEmpty()) {
+            return "";
+        }
+        return paginateText(fullText, 12); // Cambiato da 20 a 12 righe per pagina
     }
 }
