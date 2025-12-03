@@ -56,6 +56,18 @@ public class Room {
         return null;
     }
     
+    public String getItemsString() {
+        if (items.isEmpty()) {
+            return "Nessun oggetto qui.";
+        }
+        
+        StringBuilder sb = new StringBuilder();
+        for (Item item : items) {
+            sb.append("  ").append(item.toString()).append(" - ").append(item.getDescription()).append("\n");
+        }
+        return sb.toString();
+    }
+    
     public String getFullDescription() {
         StringBuilder sb = new StringBuilder();
         sb.append("=== ").append(name).append(" ===\n\n");

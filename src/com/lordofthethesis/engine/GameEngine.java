@@ -512,17 +512,79 @@ public class GameEngine {
         mordor.addExit("ovest", camminiMorti);
         mordor.addExit("sud", minieraMoria);
         
-        // Aggiunta oggetti - OGGETTI LOTR
-        Item tesi = new Item("tesi", "La tua TESI - l'Unico Anello del Sapere! Deve essere distrutta a Mordor!", true, true);
+        // OGGETTI LOTR SPECIALI - Con effetti e poteri
+        
+        // 💍 ANELLO UNICO (Tesi) - già nel giocatore all'inizio
+        Item anello = new Item("Anello", 
+                               "L'Anello Unico del Potere. Ti rende invisibile ma corrompe la tua anima.",
+                               true, Item.ItemType.ANELLO,
+                               0,    // energia
+                               2,    // corruzione +2
+                               true, // invisibilità
+                               false,// luce
+                               0,    // difesa
+                               -1);  // usi infiniti
+        player.addItem(anello); // Il giocatore inizia CON l'Anello!
+        
+        // 🍞 LEMBAS - Pane Elfico (a Lothlorien da Galadriel)
+        Item lembas1 = new Item("Lembas", 
+                                "Pane degli Elfi di Lothlórien. Un morso ti sazia per giorni!",
+                                true, Item.ItemType.CIBO,
+                                50,   // +50 energia
+                                0,    // no corruzione
+                                false,// no invisibilità
+                                false,// no luce
+                                0,    // no difesa
+                                3);   // 3 usi
+        lothlorien.addItem(lembas1);
+        
+        Item lembas2 = new Item("Lembas", 
+                                "Pane degli Elfi di Lothlórien. Un morso ti sazia per giorni!",
+                                true, Item.ItemType.CIBO,
+                                50, 0, false, false, 0, 3);
+        lothlorien.addItem(lembas2);
+        
+        // 🧥 MANTELLO ELFICO - Da Galadriel (Lothlorien)
+        Item mantello = new Item("Mantello", 
+                                 "Mantello Elfico di Lothlórien. Ti rende invisibile senza corruzione!",
+                                 true, Item.ItemType.VESTITO,
+                                 0,    // no energia
+                                 0,    // NO corruzione!
+                                 true, // invisibilità PULITA
+                                 false,// no luce
+                                 0,    // no difesa
+                                 -1);  // usi infiniti
+        lothlorien.addItem(mantello);
+        
+        // 💡 FIALA DI GALADRIEL - Luce nelle tenebre (Lothlorien)
+        Item fiala = new Item("Fiala", 
+                             "Fiala di Galadriel con la luce di Eärendil. Scaccia le tenebre!",
+                             true, Item.ItemType.LUCE,
+                             0,    // no energia
+                             0,    // no corruzione
+                             false,// no invisibilità
+                             true, // LUCE!
+                             0,    // no difesa
+                             -1);  // usi infiniti
+        lothlorien.addItem(fiala);
+        
+        // ⚔️ PUNGOLO - Spada elfica (Gran Burrone)
+        Item pungolo = new Item("Pungolo", 
+                               "Spada elfica di Bilbo. Brilla di blu quando i nemici sono vicini!",
+                               true, Item.ItemType.ARMA,
+                               0,    // no energia
+                               0,    // no corruzione
+                               false,// no invisibilità
+                               false,// no luce
+                               20,   // +20 difesa
+                               -1);  // usi infiniti
+        granBurrone.addItem(pungolo);
+        
+        // Altri oggetti narrativi
+        Item tesi = new Item("Tesi", "La tua TESI - documento del potere supremo! Deve essere portata a Mordor!", true, true);
         contea.addItem(tesi);
         
-        Item lembas = new Item("lembas", "Pane degli Elfi. Un morso ti sazia per giorni di studio!", true);
-        lothlorien.addItem(lembas);
-        
-        Item spada = new Item("spada", "Pungolo, la spada elfica che brilla quando ci sono deadline vicine!", true);
-        granBurrone.addItem(spada);
-        
-        Item palantir = new Item("palantir", "Una sfera veggente. Mostra il futuro della tua carriera accademica!", true);
+        Item palantir = new Item("Palantir", "Una sfera veggente. Mostra il futuro della tua carriera accademica!", true);
         gondor.addItem(palantir);
         
         // Aggiunta personaggi - PERSONAGGI LOTR
@@ -659,10 +721,22 @@ public class GameEngine {
                 return "Premi INVIO/SPAZIO o digita 'avanti' per continuare...";
             }
             
+            // INPUT RAPIDO: supporto per risposte veloci con numeri/lettere singole
+            // Se l'input è un numero (1,2,3) o lettera (A,B,C), trattalo come scelta
+            if (action.matches("[123abc]")) {
+                // Converti numero in lettera
+                if (action.matches("[123]")) {
+                    int num = Integer.parseInt(action);
+                    action = String.valueOf((char)('A' + num - 1));
+                }
+                return processChoice(action.toUpperCase());
+            }
+            
             switch (action) {
                 case "avanti":
                 case "continua":
                 case "prosegui":
+                case "": // ENTER vuoto = avanti
                     return startNextChapter();
                     
                 case "rispondi":
@@ -676,22 +750,40 @@ public class GameEngine {
                         return "Devi scegliere un'opzione! Usa: scegli A (o B, o C)";
                     }
                     return processChoice(target.trim().toUpperCase());
+                
+                // NUOVI COMANDI PER OGGETTI
+                case "prendi":
+                case "raccogli":
+                    if (target.isEmpty()) {
+                        return "Cosa vuoi prendere? Usa: prendi [nome oggetto]";
+                    }
+                    return takeItemFromRoom(target);
                     
-                case "aiuto":
-                    return getNarrativeHelpText();
-                    
-                case "dove":
-                case "stato":
-                    return getProgressStatus();
+                case "usa":
+                case "utilizza":
+                    if (target.isEmpty()) {
+                        return "Cosa vuoi usare? Usa: usa [nome oggetto]";
+                    }
+                    return player.useItem(target);
                     
                 case "inventario":
                 case "zaino":
                     return player.getInventoryString();
                 
-                case "corruzione":
+                case "stato":
                 case "status":
+                    return player.getStatus();
+                
+                case "corruzione":
                     return "💍 Livello di corruzione: " + player.getCorruptionLevel() + 
                            " - " + player.getCorruptionStatus();
+                    
+                case "dove":
+                    return getProgressStatus();
+                    
+                case "aiuto":
+                case "help":
+                    return getNarrativeHelpText();
                     
                 case "esci":
                 case "quit":
@@ -699,7 +791,11 @@ public class GameEngine {
                     return "Grazie per aver giocato a Il Signore degli Anelli!";
                     
                 default:
-                    return "Comando non riconosciuto. Usa 'avanti' per il prossimo capitolo, 'rispondi [risposta]' per rispondere, 'scegli [A/B/C]' per scegliere, 'aiuto' per info.";
+                    // Se sembra una risposta diretta (senza "rispondi"), prova a usarla come risposta
+                    if (!command.contains(" ") && command.length() <= 20) {
+                        return answerChapter(command);
+                    }
+                    return "Comando non riconosciuto. Usa 'aiuto' per vedere i comandi disponibili.";
             }
         }
         
@@ -744,6 +840,38 @@ public class GameEngine {
         
         player.setCurrentRoom(nextRoom);
         return nextRoom.getFullDescription();
+    }
+    
+    /**
+     * Raccoglie un oggetto dalla stanza corrente (usato in modalità narrativa)
+     */
+    private String takeItemFromRoom(String itemName) {
+        if (itemName.isEmpty()) {
+            return "Cosa vuoi prendere?";
+        }
+        
+        Item item = player.getCurrentRoom().removeItem(itemName);
+        if (item == null) {
+            return "❌ Non c'è nessun '" + itemName + "' qui.\n\n" +
+                   "Oggetti disponibili:\n" + 
+                   (player.getCurrentRoom().getItems().isEmpty() ? 
+                    "  Nessun oggetto in questa stanza." : 
+                    player.getCurrentRoom().getItemsString());
+        }
+        
+        if (!item.canTake()) {
+            player.getCurrentRoom().addItem(item); // rimetti l'oggetto
+            return "❌ Non puoi prendere questo oggetto!";
+        }
+        
+        if (player.addItem(item)) {
+            return "✅ Hai raccolto: " + item.toString() + "\n\n" +
+                   item.getDescription() + "\n\n" +
+                   "💡 Usa 'usa " + itemName + "' per utilizzarlo!";
+        } else {
+            player.getCurrentRoom().addItem(item); // rimetti l'oggetto
+            return "❌ Il tuo zaino è pieno! (Max: " + player.getInventory().size() + " oggetti)";
+        }
     }
     
     private String takeItem(String itemName) {
@@ -1167,18 +1295,32 @@ public class GameEngine {
         return "═══════════════════════════════════════════════════════════\n" +
                "           🎮 COMANDI DISPONIBILI 🎮\n" +
                "═══════════════════════════════════════════════════════════\n\n" +
-               "📖 avanti              - Inizia il prossimo capitolo\n" +
-               "✍️  rispondi [risposta] - Rispondi all'enigma\n" +
-               "⚔️  scegli [A/B/C]     - Fai una scelta narrativa\n" +
-               "💍 corruzione          - Mostra il tuo livello di corruzione\n" +
-               "❓ aiuto               - Mostra questo messaggio\n" +
-               "📊 dove/stato          - Mostra progresso nella storia\n" +
-               "🎒 inventario          - Mostra il tuo zaino\n" +
-               "🚪 esci                - Esci dal gioco\n\n" +
+               "📖 NAVIGAZIONE:\n" +
+               "   avanti / ENTER      - Avanza al prossimo capitolo\n" +
+               "   [risposta]          - Risposta diretta (senza 'rispondi')\n" +
+               "   rispondi [risposta] - Rispondi all'enigma\n\n" +
+               "⚔️  SCELTE:\n" +
+               "   1 / 2 / 3           - Scelta rapida con numeri\n" +
+               "   A / B / C           - Scelta rapida con lettere\n" +
+               "   scegli [A/B/C]      - Fai una scelta narrativa\n\n" +
+               "🎒 OGGETTI:\n" +
+               "   prendi [nome]       - Raccogli un oggetto\n" +
+               "   usa [nome]          - Usa un oggetto (Lembas, Mantello, etc)\n" +
+               "   inventario          - Mostra il tuo zaino\n\n" +
+               "📊 STATO:\n" +
+               "   stato               - Mostra energia, difesa, corruzione\n" +
+               "   corruzione          - Livello di corruzione dell'Anello\n" +
+               "   dove                - Progresso nella storia\n\n" +
+               "❓ ALTRO:\n" +
+               "   aiuto               - Mostra questo messaggio\n" +
+               "   esci                - Esci dal gioco\n\n" +
                "═══════════════════════════════════════════════════════════\n" +
-               "        Segui la storia del Signore degli Anelli!\n" +
-               "        Risolvi enigmi e fai scelte per avanzare!\n" +
-               "        Attenzione: l'uso dell'Anello corrompe!\n" +
+               "  💡 OGGETTI SPECIALI LOTR:\n" +
+               "  💍 Anello - invisibilità (+2 corruzione)\n" +
+               "  🍞 Lembas - pane elfico (+50 energia)\n" +
+               "  🧥 Mantello - invisibilità pulita (no corruzione)\n" +
+               "  💡 Fiala - luce contro le tenebre\n" +
+               "  ⚔️  Pungolo - spada elfica (+20 difesa)\n" +
                "═══════════════════════════════════════════════════════════";
     }
     

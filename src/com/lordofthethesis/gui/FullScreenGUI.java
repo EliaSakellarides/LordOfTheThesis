@@ -19,6 +19,8 @@ public class FullScreenGUI extends JFrame {
     private JTextField commandField;
     private JButton submitButton;
     private JPanel commandPanel;
+    private JPanel choicePanel; // Pannello per scelte rapide
+    private JButton[] choiceButtons; // Bottoni A, B, C
     
     public FullScreenGUI() {
         engine = new GameEngine();
@@ -52,11 +54,21 @@ public class FullScreenGUI extends JFrame {
         commandPanel.setBackground(new Color(20, 20, 30));
         commandPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         
+        // Pannello superiore per bottoni scelta rapida
+        choicePanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
+        choicePanel.setBackground(new Color(20, 20, 30));
+        createChoiceButtons();
+        commandPanel.add(choicePanel, BorderLayout.NORTH);
+        
+        // Pannello inferiore per input testo
+        JPanel inputPanel = new JPanel(new BorderLayout(5, 5));
+        inputPanel.setBackground(new Color(20, 20, 30));
+        
         // Label prompt
         JLabel promptLabel = new JLabel(">");
         promptLabel.setForeground(new Color(200, 180, 100));
         promptLabel.setFont(new Font("Monospaced", Font.BOLD, 16));
-        commandPanel.add(promptLabel, BorderLayout.WEST);
+        inputPanel.add(promptLabel, BorderLayout.WEST);
         
         // Campo comando
         commandField = new JTextField();
@@ -68,7 +80,7 @@ public class FullScreenGUI extends JFrame {
             BorderFactory.createLineBorder(new Color(200, 180, 100), 2),
             BorderFactory.createEmptyBorder(3, 8, 3, 8)
         ));
-        commandPanel.add(commandField, BorderLayout.CENTER);
+        inputPanel.add(commandField, BorderLayout.CENTER);
         
         // Bottone submit (piccolo)
         submitButton = new JButton("↵");
@@ -78,7 +90,40 @@ public class FullScreenGUI extends JFrame {
         submitButton.setFocusPainted(false);
         submitButton.setBorder(BorderFactory.createLineBorder(new Color(200, 180, 100), 2));
         submitButton.setPreferredSize(new Dimension(50, 30));
-        commandPanel.add(submitButton, BorderLayout.EAST);
+        inputPanel.add(submitButton, BorderLayout.EAST);
+        
+        commandPanel.add(inputPanel, BorderLayout.CENTER);
+    }
+    
+    private void createChoiceButtons() {
+        choiceButtons = new JButton[4]; // Avanti + A, B, C
+        String[] labels = {"⏩ AVANTI", "A", "B", "C"};
+        String[] commands = {"avanti", "A", "B", "C"};
+        Color[] colors = {
+            new Color(100, 150, 100), // Verde per Avanti
+            new Color(80, 100, 150),  // Blu per A
+            new Color(150, 100, 80),  // Arancio per B
+            new Color(120, 80, 120)   // Viola per C
+        };
+        
+        for (int i = 0; i < choiceButtons.length; i++) {
+            final String cmd = commands[i];
+            choiceButtons[i] = new JButton(labels[i]);
+            choiceButtons[i].setBackground(colors[i]);
+            choiceButtons[i].setForeground(Color.WHITE);
+            choiceButtons[i].setFont(new Font("SansSerif", Font.BOLD, 14));
+            choiceButtons[i].setFocusPainted(false);
+            choiceButtons[i].setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(200, 180, 100), 2),
+                BorderFactory.createEmptyBorder(5, 15, 5, 15)
+            ));
+            choiceButtons[i].setCursor(new Cursor(Cursor.HAND_CURSOR));
+            choiceButtons[i].addActionListener(e -> {
+                processCommand(cmd);
+                commandField.requestFocusInWindow();
+            });
+            choicePanel.add(choiceButtons[i]);
+        }
     }
     
     private void setupListeners() {
@@ -90,6 +135,27 @@ public class FullScreenGUI extends JFrame {
         commandField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
+                // Scelte rapide con numeri 1, 2, 3 (solo se campo vuoto)
+                if (commandField.getText().isEmpty()) {
+                    switch (e.getKeyCode()) {
+                        case KeyEvent.VK_1:
+                        case KeyEvent.VK_NUMPAD1:
+                            processCommand("A");
+                            e.consume();
+                            return;
+                        case KeyEvent.VK_2:
+                        case KeyEvent.VK_NUMPAD2:
+                            processCommand("B");
+                            e.consume();
+                            return;
+                        case KeyEvent.VK_3:
+                        case KeyEvent.VK_NUMPAD3:
+                            processCommand("C");
+                            e.consume();
+                            return;
+                    }
+                }
+                
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_ENTER:
                     case KeyEvent.VK_SPACE:
@@ -175,13 +241,22 @@ public class FullScreenGUI extends JFrame {
                      "👁️  F5 - Guarda\n" +
                      "❓ F12 - Aiuto\n\n" +
                      "═══════════════════════════════════════════════\n" +
-                     "         📖 COMANDI NARRATIVA LOTR 📖\n" +
+                     "         🎯 SCELTE RAPIDE 🎯\n" +
+                     "═══════════════════════════════════════════════\n\n" +
+                     "🟢 Bottone AVANTI / ENTER vuoto - Avanza storia\n" +
+                     "🔵 Bottone A / tasto 1 - Scelta A\n" +
+                     "🟠 Bottone B / tasto 2 - Scelta B\n" +
+                     "🟣 Bottone C / tasto 3 - Scelta C\n\n" +
+                     "═══════════════════════════════════════════════\n" +
+                     "         📖 COMANDI TESTO 📖\n" +
                      "═══════════════════════════════════════════════\n\n" +
                      "📖 avanti - Inizia prossimo capitolo\n" +
-                     "✍️  rispondi [risposta] - Rispondere enigma\n" +
-                     "🎒 inventario - Vedere inventario\n" +
-                     "📍 dove/stato - Progresso storia\n" +
-                     "❓ aiuto - Mostra aiuto\n" +
+                     "✍️  [risposta] - Risposta diretta (senza 'rispondi')\n" +
+                     "🎒 inventario / stato - Info giocatore\n" +
+                     "🍞 prendi [nome] - Raccogli oggetto\n" +
+                     "💍 usa [nome] - Usa oggetto\n" +
+                     "📍 dove - Progresso storia\n" +
+                     "❓ aiuto - Mostra aiuto completo\n" +
                      "🚪 esci - Uscire dal gioco\n\n" +
                      "═══════════════════════════════════════════════\n" +
                      "   🎵 Le musiche cambiano ad ogni capitolo! 🎵\n" +
