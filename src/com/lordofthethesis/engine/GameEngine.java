@@ -105,8 +105,10 @@ public class GameEngine {
         addLog("");
         addLog("🎮 MODALITÀ NARRATIVA ATTIVA");
         addLog("Risolvi enigmi per avanzare nella storia!");
-        addLog("Digita 'avanti' per iniziare il primo enigma.");
         addLog("");
+        
+        // Avvia automaticamente il primo capitolo
+        startNextChapter();
     }
 
     private void createStoryChapters() {
