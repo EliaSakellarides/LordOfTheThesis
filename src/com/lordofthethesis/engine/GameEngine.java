@@ -1071,13 +1071,13 @@ public class GameEngine {
                      "💡 Usa: rispondi [risposta]\n" +
                      "═══════════════════════════════════════════════════════════";
         
-        // Imposta il testo per la paginazione
-        fullText = msg;
+        // Disabilita la paginazione per mostrare l'enigma completo
+        fullText = "";
         textPage = 0;
-        hasMorePages = true; // Forza paginazione attiva
+        hasMorePages = false;
         
         addLog(msg);
-        return getCurrentPageText(); // Restituisci la prima pagina
+        return msg; // Restituisci il testo completo senza paginazione
     }
     
     private String answerChapter(String answer) {
