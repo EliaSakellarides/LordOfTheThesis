@@ -114,11 +114,16 @@ public class GameEngine {
         storyChapters.clear();
         
         // CAPITOLO 1: INTRO - SAURON E LA TESI
+        Map<String, String> cap1Choices = new HashMap<>();
+        cap1Choices.put("A", "2");
+        cap1Choices.put("B", "5");
+        cap1Choices.put("C", "6");
         storyChapters.add(new Level(
             "cap1_sauron",
             "Prologo - Sauron forgia la Tesi",
             "🔥 Nelle fiamme del Monte Fato, Sauron forgia la TESI UNICA! 💍 'UNA TESI PER DOMINARLE TUTTE' 💍. Questa tesi ha il potere di dare la laurea con lode... Ma corrompe chi la possiede! Deve essere distrutta dove fu creata: a Mordor.\n\n❓ Per iniziare il viaggio, quanto fa 1 + 1?",
-            Arrays.asList("2", "due"),
+            cap1Choices,
+            "A",
             "La somma più semplice!"
         ));
         
@@ -1067,9 +1072,20 @@ public class GameEngine {
         String msg = "\n═══════════════════════════════════════════════════════════\n" +
                      "   CAPITOLO " + (currentChapter + 1) + " / " + storyChapters.size() + ": " + chapter.getTitle() + "\n" +
                      "═══════════════════════════════════════════════════════════\n\n" +
-                     chapter.getPrompt() + "\n\n" +
-                     "💡 Usa: rispondi [risposta]\n" +
-                     "═══════════════════════════════════════════════════════════";
+                     chapter.getPrompt() + "\n\n";
+        
+        // Se ci sono scelte multiple, mostrali
+        if (chapter.hasChoices()) {
+            Map<String, String> choices = chapter.getChoices();
+            msg += "🔘 SCELTE:\n";
+            if (choices.containsKey("A")) msg += "   A) " + choices.get("A") + "\n";
+            if (choices.containsKey("B")) msg += "   B) " + choices.get("B") + "\n";
+            if (choices.containsKey("C")) msg += "   C) " + choices.get("C") + "\n";
+            msg += "\n💡 Premi il pulsante A, B o C oppure digita 'scegli A' (o B, o C)\n";
+        } else {
+            msg += "💡 Usa: rispondi [risposta]\n";
+        }
+        msg += "═══════════════════════════════════════════════════════════";
         
         // Disabilita la paginazione per mostrare l'enigma completo
         fullText = "";
@@ -1138,16 +1154,22 @@ public class GameEngine {
      * Gestisce le scelte narrative (A/B/C)
      */
     private String processChoice(String choice) {
-        // Per ora, implementiamo una logica di base
-        // In futuro, ogni capitolo potrà avere le proprie scelte
-        
         if (!choice.matches("[ABC]")) {
             return "❌ Scelta non valida! Devi scegliere A, B o C.\nUsa: scegli A (o scegli B, o scegli C)";
         }
         
+        // Se il capitolo corrente ha scelte multiple, trattalo come risposta
+        if (currentChapter < storyChapters.size()) {
+            Level chapter = storyChapters.get(currentChapter);
+            if (chapter.hasChoices()) {
+                // Verifica se la scelta è corretta
+                return answerChapter(choice);
+            }
+        }
+        
         String result = "";
         
-        // Esempio di scelta: quando incontri i Cavalieri Neri (capitolo 4)
+        // Scelte narrative per capitoli specifici
         if (currentChapter == 3) { // Capitolo Spettri
             switch (choice) {
                 case "A":

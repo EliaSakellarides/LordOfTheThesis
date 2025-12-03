@@ -11,6 +11,7 @@ public class Level {
     private String prompt;
     private List<String> acceptableAnswers;
     private String hint;
+    private Map<String, String> choices; // A -> "2", B -> "5", C -> "6"
 
     public Level(String key, String title, String prompt, List<String> acceptableAnswers, String hint) {
         this.key = key;
@@ -19,12 +20,26 @@ public class Level {
         this.acceptableAnswers = new ArrayList<>();
         for (String a : acceptableAnswers) this.acceptableAnswers.add(a.toLowerCase());
         this.hint = hint;
+        this.choices = null; // Nessuna scelta multipla
+    }
+    
+    // Costruttore con scelte multiple
+    public Level(String key, String title, String prompt, Map<String, String> choices, String correctChoice, String hint) {
+        this.key = key;
+        this.title = title;
+        this.prompt = prompt;
+        this.acceptableAnswers = new ArrayList<>();
+        this.acceptableAnswers.add(correctChoice.toLowerCase());
+        this.hint = hint;
+        this.choices = choices;
     }
 
     public String getKey() { return key; }
     public String getTitle() { return title; }
     public String getPrompt() { return prompt; }
     public String getHint() { return hint; }
+    public Map<String, String> getChoices() { return choices; }
+    public boolean hasChoices() { return choices != null && !choices.isEmpty(); }
 
     public boolean checkAnswer(String answer) {
         if (answer == null) return false;
