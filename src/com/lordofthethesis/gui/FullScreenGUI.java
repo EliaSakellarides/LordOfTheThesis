@@ -270,8 +270,8 @@ public class FullScreenGUI extends JFrame {
         
         // In modalità narrativa, avvia direttamente il primo capitolo
         if (engine.isNarrativeMode()) {
-            // Salta l'intro e vai direttamente al primo capitolo
-            String firstChapter = engine.processCommand("avanti");
+            // Forza l'avvio del primo capitolo con il suo enigma
+            String firstChapter = engine.forceStartFirstChapter();
             renderer.setNarrativeText(firstChapter);
             renderer.setRoom(engine.getCurrentRoomKey());
         } else {

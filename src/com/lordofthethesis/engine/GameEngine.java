@@ -1432,6 +1432,13 @@ public class GameEngine {
         // Non serve più l'intro cinematica - il primo capitolo si avvia automaticamente
     }
     
+    // Forza l'avvio del primo capitolo (chiamato dalla GUI all'inizio)
+    public String forceStartFirstChapter() {
+        currentChapterStarted = false; // Reset per permettere l'avvio
+        currentChapterCompleted = false;
+        return startNextChapter();
+    }
+    
     public boolean isInCinematicIntro() {
         return inCinematicIntro;
     }
