@@ -19,6 +19,7 @@ public class GameEngine {
     private boolean narrativeMode;
     private List<Level> storyChapters; // Capitoli della storia con enigmi
     private int currentChapter;
+    private boolean currentChapterCompleted; // Se il capitolo corrente è stato risolto
     // Audio manager per musiche di sottofondo
     private AudioManager audioManager;
     // Intro cinematica
@@ -38,6 +39,7 @@ public class GameEngine {
         this.narrativeMode = true; // ATTIVA MODALITÀ NARRATIVA
         this.storyChapters = new ArrayList<>();
         this.currentChapter = 0;
+        this.currentChapterCompleted = false;
         this.audioManager = new AudioManager();
         this.inCinematicIntro = false;
         this.introStep = 0;
@@ -1036,6 +1038,13 @@ public class GameEngine {
             return text;
         }
         
+        // Verifica se il capitolo corrente è stato completato
+        if (!currentChapterCompleted && currentChapter < storyChapters.size()) {
+            return "⚠️ Devi prima risolvere l'enigma del capitolo corrente!\n\n" +
+                   "💡 Scrivi la tua risposta (esempio: 'verde' per il colore dell'erba)\n" +
+                   "   oppure usa 'aiuto' per vedere i comandi disponibili.";
+        }
+        
         if (currentChapter >= storyChapters.size()) {
             return "🎉 HAI COMPLETATO IL SIGNORE DEGLI ANELLI! 🎉\n\n" +
                    "La TESI è stata distrutta!\n" +
@@ -1048,6 +1057,7 @@ public class GameEngine {
         }
         
         Level chapter = storyChapters.get(currentChapter);
+        currentChapterCompleted = false; // Il nuovo capitolo non è ancora completato
         
         // Cambia stanza in base al capitolo
         updateRoomByChapter(currentChapter);
@@ -1079,6 +1089,7 @@ public class GameEngine {
         if (correct) {
             player.addScore(100);
             currentChapter++;
+            currentChapterCompleted = true; // Marca il capitolo come completato
             
             String success = "✅ RISPOSTA CORRETTA! ✅\n\n" +
                            "Capitolo completato: " + chapter.getTitle() + "\n" +
