@@ -108,9 +108,6 @@ public class GameEngine {
         addLog("🎮 MODALITÀ NARRATIVA ATTIVA");
         addLog("Risolvi enigmi per avanzare nella storia!");
         addLog("");
-        
-        // Avvia automaticamente il primo capitolo
-        startNextChapter();
     }
 
     private void createStoryChapters() {
@@ -1430,15 +1427,9 @@ public class GameEngine {
     
     // Attiva l'intro cinematica (da chiamare all'avvio del gioco)
     public void startCinematicIntro() {
-        inCinematicIntro = true;
+        inCinematicIntro = false; // Salta l'intro, vai direttamente al primo capitolo
         introStep = 0;
-        // Imposta subito l'immagine di Sauron
-        updateRoomByChapter(0);
-        
-        // Prepara il testo dell'intro (breve, per non coprire l'immagine)
-        fullText = "🌋 NEL REGNO OSCURO DI MORDOR 🌋\n\nNei giorni più bui della Terra di Mezzo, uno studente di nome Frodo si ritrova per caso in possesso di un'antica tesi... 💍 L'ANELLO DEL POTERE 💍\n\nQuesta tesi, forgiata nel fuoco del Monte Fato dall'oscuro signore Sauron, ha il potere di controllare tutte le altre tesi accademiche...\n\n[Premi INVIO o SPAZIO per continuare]";
-        textPage = 0;
-        hasMorePages = true;
+        // Non serve più l'intro cinematica - il primo capitolo si avvia automaticamente
     }
     
     public boolean isInCinematicIntro() {

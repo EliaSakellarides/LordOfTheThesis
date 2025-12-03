@@ -268,14 +268,11 @@ public class FullScreenGUI extends JFrame {
     public void startGame(String playerName) {
         engine.initializeGame(playerName);
         
-        // In modalità narrativa, avvia l'INTRO CINEMATICA con immagine di Sauron
+        // In modalità narrativa, avvia direttamente il primo capitolo
         if (engine.isNarrativeMode()) {
-            // Attiva intro cinematica e imposta immagine Sauron
-            engine.startCinematicIntro();
-            
-            // Mostra la prima pagina dell'intro
-            String firstPage = engine.getCurrentPageText();
-            renderer.setNarrativeText(firstPage);
+            // Salta l'intro e vai direttamente al primo capitolo
+            String firstChapter = engine.processCommand("avanti");
+            renderer.setNarrativeText(firstChapter);
             renderer.setRoom(engine.getCurrentRoomKey());
         } else {
             // Modalità classica: mostra solo messaggio di benvenuto
@@ -284,8 +281,12 @@ public class FullScreenGUI extends JFrame {
             renderer.setRoom(engine.getCurrentRoomKey());
         }
         
-        // Inventario vuoto iniziale
-        renderer.setInventory(new ArrayList<>());
+        // Mostra inventario iniziale (con l'Anello)
+        java.util.List<String> items = new ArrayList<>();
+        for (com.lordofthethesis.model.Item item : engine.getPlayer().getInventory()) {
+            items.add(item.getName());
+        }
+        renderer.setInventory(items);
         
         // Focus su comando
         commandField.requestFocusInWindow();
