@@ -4,31 +4,25 @@ import com.lordofthethesis.gui.FullScreenGUI;
 import javax.swing.*;
 
 /**
- * Lord of the Thesis - An Academic Adventure
+ * Lord of the Thesis - Avventura Grafica LOTR
  * 
- * A narrative text adventure game inspired by The Lord of the Rings,
- * where you embark on an epic journey to complete your thesis.
- * 
- * Features:
- * - 10 story chapters with puzzles
- * - Custom pixel art images
- * - chiptune soundtrack
- * - Cinematic intro sequence
+ * Gioco testuale ispirato al Signore degli Anelli
+ * ambientato nel mondo universitario.
  * 
  * @author Elia Sakellarides
  * @version 1.0
  */
 public class Main {
     public static void main(String[] args) {
-        // Set native look and feel
+        // Imposta look and feel del sistema
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
-            // Use default if native fails
+            // Usa quello di default
         }
         
         SwingUtilities.invokeLater(() -> {
-            // Get player name
+            // Chiedi il nome al giocatore
             String playerName = JOptionPane.showInputDialog(null,
                 "🌋 IL SIGNORE DEGLI ANELLI - LA COMPAGNIA DELLA TESI 🌋\n\n" +
                 "Qual è il tuo nome, Portatore della Tesi?",
@@ -39,7 +33,7 @@ public class Main {
                 playerName = "Frodo";
             }
             
-            // Launch game with cinematic intro
+            // Avvia il gioco
             FullScreenGUI gui = new FullScreenGUI();
             gui.startGame(playerName);
         });

@@ -5,10 +5,10 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Audio system manager for background music playback
- * Supports WAV files with continuous looping and volume control
+ * Gestore audio per le musiche di sottofondo
+ * Supporta file WAV con loop continuo e controllo volume
  * 
- * @author Lord of the Thesis Development Team
+ * @author Elia Sakellarides
  */
 public class AudioManager {
     private Clip currentClip;

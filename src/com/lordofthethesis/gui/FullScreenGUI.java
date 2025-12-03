@@ -8,10 +8,10 @@ import java.awt.event.*;
 import java.util.ArrayList;
 
 /**
- * Full-screen graphical interface for the adventure game
- * Integrates images, dialogue, inventory and commands in a classic adventure style
+ * Interfaccia grafica a schermo intero
+ * Integra immagini, dialoghi, inventario e comandi
  * 
- * @author Lord of the Thesis Development Team
+ * @author Elia Sakellarides
  */
 public class FullScreenGUI extends JFrame {
     private GameEngine engine;

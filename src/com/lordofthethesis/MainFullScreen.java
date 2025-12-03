@@ -4,16 +4,16 @@ import com.lordofthethesis.gui.FullScreenGUI;
 import javax.swing.*;
 
 /**
- * Launcher per versione full-screen
- * Avventura grafica con tutto integrato nell'immagine
+ * Versione full-screen del gioco
+ * Interfaccia immersiva con grafica e testo integrati
  */
 public class MainFullScreen {
     public static void main(String[] args) {
-        // Set look and feel
+        // Imposta look and feel
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
-            // Usa default
+            // Usa il default
         }
         
         SwingUtilities.invokeLater(() -> {
