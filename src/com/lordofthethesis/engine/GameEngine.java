@@ -1069,23 +1069,22 @@ public class GameEngine {
         // Cambia stanza in base al capitolo
         updateRoomByChapter(currentChapter);
         
-        String msg = "\n═══════════════════════════════════════════════════════════\n" +
-                     "   CAPITOLO " + (currentChapter + 1) + " / " + storyChapters.size() + ": " + chapter.getTitle() + "\n" +
-                     "═══════════════════════════════════════════════════════════\n\n" +
+        String msg = "📖 CAP. " + (currentChapter + 1) + "/" + storyChapters.size() + ": " + chapter.getTitle() + "\n\n" +
                      chapter.getPrompt() + "\n\n";
         
-        // Se ci sono scelte multiple, mostrali
+        // Se ci sono scelte multiple, mostrali sulla stessa riga
         if (chapter.hasChoices()) {
             Map<String, String> choices = chapter.getChoices();
-            msg += "🔘 SCELTE:\n";
-            if (choices.containsKey("A")) msg += "   A) " + choices.get("A") + "\n";
-            if (choices.containsKey("B")) msg += "   B) " + choices.get("B") + "\n";
-            if (choices.containsKey("C")) msg += "   C) " + choices.get("C") + "\n";
-            msg += "\n💡 Premi il pulsante A, B o C oppure digita 'scegli A' (o B, o C)\n";
+            msg += "🔘 SCELTE: ";
+            if (choices != null) {
+                if (choices.containsKey("A")) msg += "A=" + choices.get("A") + "  ";
+                if (choices.containsKey("B")) msg += "B=" + choices.get("B") + "  ";
+                if (choices.containsKey("C")) msg += "C=" + choices.get("C");
+            }
+            msg += "\n\n💡 Premi A, B o C";
         } else {
-            msg += "💡 Usa: rispondi [risposta]\n";
+            msg += "💡 Scrivi la risposta";
         }
-        msg += "═══════════════════════════════════════════════════════════";
         
         // Disabilita la paginazione per mostrare l'enigma completo
         fullText = "";

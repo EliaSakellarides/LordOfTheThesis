@@ -32,6 +32,10 @@ public class Level {
         this.acceptableAnswers.add(correctChoice.toLowerCase());
         this.hint = hint;
         this.choices = choices;
+        System.out.println("DEBUG Level creato con scelte: " + (choices != null ? choices.size() + " opzioni" : "NULL"));
+        if (choices != null) {
+            choices.forEach((k, v) -> System.out.println("  " + k + " -> " + v));
+        }
     }
 
     public String getKey() { return key; }

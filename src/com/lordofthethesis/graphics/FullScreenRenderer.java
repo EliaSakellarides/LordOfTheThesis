@@ -21,7 +21,7 @@ public class FullScreenRenderer extends JPanel {
     // Dimensioni
     private static final int WIDTH = 1000;
     private static final int HEIGHT = 750;
-    private static final int TEXT_BOX_HEIGHT = 250; // Box del testo ancora più grande
+    private static final int TEXT_BOX_HEIGHT = 280; // Box del testo molto grande
     private static final int INVENTORY_SIZE = 40;
     
     // Colori tema scuro elegante
@@ -148,8 +148,8 @@ public class FullScreenRenderer extends JPanel {
         
         // Disegna il testo narrativo con word wrap - USA TUTTO LO SPAZIO!
         g2d.setColor(TEXT_FG);
-        g2d.setFont(new Font("Monospaced", Font.PLAIN, 13));
-        drawWrappedText(g2d, narrativeText, 15, boxY + 20, WIDTH - 30, TEXT_BOX_HEIGHT - 30);
+        g2d.setFont(new Font("Monospaced", Font.PLAIN, 12)); // Font più piccolo per più testo
+        drawWrappedText(g2d, narrativeText, 10, boxY + 15, WIDTH - 20, TEXT_BOX_HEIGHT - 20);
     }
     
     private void drawMiniInventory(Graphics2D g2d) {
